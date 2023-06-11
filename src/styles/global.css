@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply w-full h-full text-gray-800 antialiased dark:text-white;
+  }
+
+  html, #__next {
+    @apply h-full w-full;
+  }
+}
+
+@layer components {
+  .btn-icon > svg {
+    @apply h-5 w-5;
+  }
+}
+
+.qr-container > svg {
+  width: 100%;
+}

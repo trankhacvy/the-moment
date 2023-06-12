@@ -1,8 +1,8 @@
-import { Connection, Keypair, PublicKey, Transaction, TransactionInstruction } from "@solana/web3.js"
+import { Keypair, PublicKey, Transaction } from "@solana/web3.js"
 import * as bs58 from "bs58"
 import { NextApiRequest, NextApiResponse } from "next"
-import { MASTER_WALLET, SOLANA_RPC_URL } from "@/config/env"
-import { createCallback, createTree, mintCNft } from "@/libs/shyft"
+import { MASTER_WALLET } from "@/config/env"
+import { createCallback, mintCNft } from "@/libs/shyft"
 import { Supabase } from "@/libs/supabase"
 
 export type MakeTransactionInputData = {

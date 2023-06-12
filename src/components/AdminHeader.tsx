@@ -1,6 +1,6 @@
 import { MenuIcon, SearchIcon } from "lucide-react"
 import { useEffect, useState } from "react"
-import { IconButton } from "@/components/IconButton"
+import { IconButton } from "@/components/ui/IconButton"
 import { cn } from "@/utils/cn"
 import { AdminUserMenu } from "./AdminUserMenu"
 

@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
 import { EventDistribution } from "./EventDistribution"
 import useSWR from "swr"
 import { NftTab } from "./NftTab"

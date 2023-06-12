@@ -2,7 +2,7 @@ import * as React from "react"
 import { tv } from "tailwind-variants"
 import { cn } from "@/utils/cn"
 import { forwardRefWithAs } from "@/utils/render"
-import FormControlContext from "@/components/Form/FormControlContext"
+import FormControlContext from "@/components/ui/Form/FormControlContext"
 
 const styles = tv({
   slots: {

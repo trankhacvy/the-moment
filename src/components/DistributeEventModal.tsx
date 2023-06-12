@@ -3,12 +3,20 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react"
 import { Transaction } from "@solana/web3.js"
 import axios from "axios"
 import { useState } from "react"
-import { Button } from "./Button"
-import { Checkbox } from "./Checkbox"
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./Dialog"
-import { FormControl, FormLabel } from "./Form"
-import { Input } from "./Input"
-import { Radio } from "./Radio"
+import { Button } from "@/components/ui/Button"
+import { Checkbox } from "@/components/ui/Checkbox"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/Dialog"
+import { FormControl, FormLabel } from "@/components/ui/Form"
+import { Input } from "@/components/ui/Input"
+import { Radio } from "@/components/ui/Radio"
 
 type DistributeEventModalProps = {
   trigger: React.ReactNode

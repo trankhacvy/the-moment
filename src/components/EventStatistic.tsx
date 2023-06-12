@@ -5,9 +5,9 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import useSWR from "swr"
 import { Supabase } from "@/libs/supabase"
 import { truncate } from "@/utils/truncate"
-import { AspectRatio } from "./AspectRatio"
-import { Button } from "./Button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs"
+import { AspectRatio } from "@/components/ui/AspectRatio"
+import { Button } from "@/components/ui/Button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
 
 type EventStatisticsProps = {
   eventId: string

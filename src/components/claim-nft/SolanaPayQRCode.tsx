@@ -2,7 +2,7 @@ import { createQR, encodeURL, TransactionRequestURLFields } from "@solana/pay"
 import { Keypair } from "@solana/web3.js"
 import { XIcon } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { Typography } from "@/components/Typography"
+import { Typography } from "@/components/ui/Typography"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -12,9 +12,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/AlertDialog"
-import { AspectRatio } from "@/components/AspectRatio"
-import { IconButton } from "@/components/IconButton"
+} from "@/components/ui/AlertDialog"
+import { AspectRatio } from "@/components/ui/AspectRatio"
+import { IconButton } from "@/components/ui/IconButton"
 
 export const SolanaQRCode = ({
   eventId,

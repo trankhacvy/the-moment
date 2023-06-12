@@ -2,7 +2,7 @@ import { FlameIcon, SettingsIcon } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { cn } from "@/utils/cn"
-import { Typography } from "./Typography"
+import { Typography } from "@/components/ui/Typography"
 
 export type Props = {}
 

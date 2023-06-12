@@ -2,8 +2,8 @@ import cx from "classnames"
 import { ArrowUpIcon, XIcon } from "lucide-react"
 import React, { forwardRef, useState } from "react"
 import { useDropzone } from "react-dropzone"
-import { IconButton } from "@/components/IconButton"
-import { Typography } from "@/components/Typography"
+import { IconButton } from "@/components/ui/IconButton"
+import { Typography } from "@/components/ui/Typography"
 import { formatBytes } from "@/utils/number"
 
 export interface UploaderProps {

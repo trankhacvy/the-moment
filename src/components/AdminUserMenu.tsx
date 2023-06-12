@@ -1,9 +1,9 @@
 import { signOut, useSession } from "next-auth/react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/Avatar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/Popover"
-import { Typography } from "@/components/Typography"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"
+import { Typography } from "@/components/ui/Typography"
 import { truncate } from "@/utils/truncate"
-import { Separator } from "./Separator/Separator"
+import { Separator } from "@/components/ui/Separator"
 
 const AdminUserMenu = () => {
   const { data: session } = useSession()

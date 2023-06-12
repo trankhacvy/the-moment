@@ -1,8 +1,8 @@
 import type { ReactElement } from "react"
 import { AdminLayout } from "@/components/AdminLayout"
-import { Breadcrumbs } from "@/components/Breadcrumbs"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
-import { Typography } from "@/components/Typography"
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
+import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 
 const SettingsPage: NextPageWithLayout = () => {

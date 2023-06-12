@@ -1,4 +1,4 @@
-import { Typography } from "@/components/Typography"
+import { Typography } from "@/components/ui/Typography"
 import {
   AlertDialog,
   AlertDialogContent,
@@ -6,9 +6,9 @@ import {
   AlertDialogFooter,
   AlertDialogTrigger,
   AlertDialogCancel,
-} from "@/components/AlertDialog"
-import { AspectRatio } from "@/components/AspectRatio"
-import { Button } from "../Button"
+} from "@/components/ui/AlertDialog"
+import { AspectRatio } from "@/components/ui/AspectRatio"
+import { Button } from "@/components/ui/Button"
 
 type ClaimSuccessModalProps = {
   trigger: React.ReactNode

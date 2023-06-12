@@ -1,9 +1,9 @@
 import { CalendarIcon, GlobeIcon } from "lucide-react"
 import Link from "next/link"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/Avatar"
-import { Separator } from "@/components/Separator/Separator"
-import { Typography } from "@/components/Typography"
-import { Skeleton } from "./Skeleton/Skeleton"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar"
+import { Separator } from "@/components/ui/Separator"
+import { Typography } from "@/components/ui/Typography"
+import { Skeleton } from "@/components/ui/Skeleton"
 
 type EventItemProps = {
   id: string

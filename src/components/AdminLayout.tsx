@@ -1,8 +1,15 @@
 import { PropsWithChildren } from "react"
 import { AdminHeader } from "./AdminHeader"
 import { AdminNav } from "./AdminNav"
+import { useAuthContext } from "@/libs/auth"
 
 export const AdminLayout = ({ children }: PropsWithChildren) => {
+  const { isLoading } = useAuthContext()
+
+  if (isLoading) {
+    return <p>loading...</p>
+  }
+
   return (
     <>
       <AdminHeader />

@@ -1,46 +1,33 @@
 import dayjs from "dayjs"
-import { CalendarDaysIcon, EditIcon, ExternalLinkIcon, MapPinIcon, Share2Icon } from "lucide-react"
-import { NextPageContext } from "next"
+// import { CalendarDaysIcon, EditIcon, ExternalLinkIcon, MapPinIcon, Share2Icon } from "lucide-react"
+// import { NextPageContext } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { getServerSession } from "next-auth/next"
+// import { getServerSession } from "next-auth/next"
 import type { ReactElement } from "react"
-import useSWR from "swr"
+// import useSWR from "swr"
 import { AdminLayout } from "@/components/AdminLayout"
 import { AspectRatio } from "@/components/ui/AspectRatio"
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs"
-import { Button } from "@/components/ui/Button"
-import { IconButton } from "@/components/ui/IconButton"
-import { Separator } from "@/components/ui/Separator"
+// import { Button } from "@/components/ui/Button"
+// import { IconButton } from "@/components/ui/IconButton"
+// import { Separator } from "@/components/ui/Separator"
 import { Skeleton } from "@/components/ui/Skeleton"
 import { Typography } from "@/components/ui/Typography"
-import { Supabase } from "@/libs/supabase"
+// import { Supabase } from "@/libs/supabase"
 import { NextPageWithLayout } from "@/types"
-import { authOptions } from "@/utils/authOptions"
-import { EventDetailTabs } from "@/components/event-detail/EventDetailTabs"
+// import { authOptions } from "@/utils/authOptions"
+// import { EventDetailTabs } from "@/components/event-detail/EventDetailTabs"
+import { useNFTDrop } from "@/hooks/useNFTDrop"
+import { Routes } from "@/config/routes"
+import { NFTDropDetail } from "@/components/drop-detail/NFTDropDetail"
+import { useNFT } from "@/hooks/useNFT"
 
 const EventDetail: NextPageWithLayout = () => {
   const { query } = useRouter()
-  const eventId = query.eventId as string
+  const nftId = query.nftId as string
 
-  const {
-    data: event,
-    isLoading,
-    mutate,
-  } = useSWR(
-    eventId ? ["events", eventId] : null,
-    async () => {
-      const { data, error } = await Supabase.from("poap_events")
-        .select("*,poap_event_drops(*)")
-        .eq("id", eventId)
-        .maybeSingle()
-      if (error) throw error
-      return data
-    },
-    {}
-  )
-
-  const eventDrop = event?.poap_event_drops?.[0]
+  const { nft, isLoading } = useNFT(nftId)
 
   return (
     <>
@@ -57,25 +44,28 @@ const EventDetail: NextPageWithLayout = () => {
             </div>
           ) : (
             <Breadcrumbs aria-label="Settings" separator={<span className="mx-2 h-1 w-1 rounded-sm bg-gray-500" />}>
-              <Link href="/dashboard">
+              <Link href={Routes.DASHBOARD}>
                 <Typography as="span" level="body4">
                   Home
                 </Typography>
               </Link>
-              <Link href="/events">
+              <Link href={Routes.DASHBOARD}>
                 <Typography as="span" level="body4">
-                  Events
+                  NFT Drops
                 </Typography>
               </Link>
               <Typography as="span" level="body4" color="secondary">
-                {event?.name}
+                {nft?.name}
               </Typography>
             </Breadcrumbs>
           )}
         </div>
       </div>
-      {isLoading ? (
-        <EventSkeleton />
+
+      {isLoading ? <NFTDropSkeleton /> : <NFTDropDetail nft={nft} />}
+
+      {/* {isLoading ? (
+        <NFTDropSkeleton />
       ) : (
         <div className="flex gap-6">
           <div className="basis-1/3">
@@ -141,14 +131,14 @@ const EventDetail: NextPageWithLayout = () => {
             )}
           </div>
         </div>
-      )}
+      )} */}
 
-      {eventDrop && <EventDetailTabs eventId={eventId} dropId={eventDrop.id} name={event.name!} />}
+      {/* {eventDrop && <EventDetailTabs eventId={eventId} dropId={eventDrop.id} name={event.name!} />}  */}
     </>
   )
 }
 
-const EventSkeleton = () => {
+const NFTDropSkeleton = () => {
   return (
     <div className="flex gap-6">
       <div className="basis-1/2">
@@ -169,24 +159,24 @@ EventDetail.getLayout = function getLayout(page: ReactElement) {
   return <AdminLayout>{page}</AdminLayout>
 }
 
-export async function getServerSideProps(context: NextPageContext) {
-  // @ts-ignore
-  const session = await getServerSession(context.req, context.res, authOptions)
+// export async function getServerSideProps(context: NextPageContext) {
+//   // @ts-ignore
+//   const session = await getServerSession(context.req, context.res, authOptions)
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    }
-  }
+//   if (!session) {
+//     return {
+//       redirect: {
+//         destination: "/",
+//         permanent: false,
+//       },
+//     }
+//   }
 
-  return {
-    props: {
-      session,
-    },
-  }
-}
+//   return {
+//     props: {
+//       session,
+//     },
+//   }
+// }
 
 export default EventDetail

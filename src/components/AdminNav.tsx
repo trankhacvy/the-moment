@@ -8,7 +8,7 @@ export type Props = {}
 
 const NavItems = [
   {
-    text: "Events",
+    text: "NFT Drops",
     href: "/dashboard",
     icon: <FlameIcon />,
   },

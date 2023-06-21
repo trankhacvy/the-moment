@@ -9,6 +9,9 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: false })]], {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    domains: ["google.com", "gsohmicqdlihspbntfet.supabase.co"],
+  },
   // experimental: { instrumentationHook: true },
   // rewrites() {
   //   return [

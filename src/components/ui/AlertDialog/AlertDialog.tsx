@@ -42,6 +42,7 @@ const contentStyles = tv({
     },
   },
   defaultVariants: {
+    // @ts-ignore
     fullWidth: true,
     maxWidth: "md",
   },

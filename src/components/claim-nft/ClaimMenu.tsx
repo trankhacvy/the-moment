@@ -8,7 +8,7 @@ import { Database } from "@/types/supabase.types"
 import dynamic from "next/dynamic"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useToast } from "@/components/ui/Toast"
-import {  useState } from "react"
+import { useState } from "react"
 import axios from "axios"
 import { ClaimSuccessModal } from "./ClaimSuccessModal"
 

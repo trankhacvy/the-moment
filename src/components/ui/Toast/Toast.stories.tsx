@@ -9,7 +9,7 @@ const meta = {
 
   decorators: [
     (story) => (
-      <div className="max-w-lg p-6">
+      <div className="">
         {story()}
         <Toaster />
       </div>
@@ -29,9 +29,10 @@ export const Default: Story = {
       <Button
         onClick={() =>
           toast({
+            variant: "error",
             title: "Scheduled: Catch up",
             description: "Friday, February 10, 2023 at 5:57 PM",
-            
+            duration: 100000000,
           })
         }
       >

@@ -1,4 +1,4 @@
-import { MenuIcon, SearchIcon } from "lucide-react"
+import { MenuIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { IconButton } from "@/components/ui/IconButton"
 import { cn } from "@/utils/cn"
@@ -30,9 +30,9 @@ const AdminHeader = () => {
         <IconButton className="mr-2 lg:hidden" size="sm">
           <MenuIcon />
         </IconButton>
-        <IconButton size="sm">
+        {/* <IconButton size="sm">
           <SearchIcon />
-        </IconButton>
+        </IconButton> */}
         <div className="flex grow items-center justify-end gap-2">
           <AdminUserMenu />
         </div>

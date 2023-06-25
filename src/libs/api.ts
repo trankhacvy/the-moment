@@ -2,18 +2,14 @@ import { BASE_API_URL } from "@/config/common"
 import fetcher from "./fetcher"
 import {
   BaseListResponse,
-  CreateDropRequest,
   CreateNFTRequest,
-  GetCreateDropTXRequest,
-  LoginResponse,
   NFTDrop,
-  NFTMetadata,
-  User,
 } from "@/types/schema"
+import { CreateDropTXDto, CreateNFTDropDto, LoginPayloadDto, NftDto, UserDto } from "@/types/apis"
 
 type Headers = Record<string, string>
 
-export class Client {
+class Client {
   headers: Headers = {
     "Content-Type": "application/json",
   }
@@ -44,7 +40,7 @@ export class Client {
   }
 
   public login(email: string, password: string) {
-    return fetcher<LoginResponse>(`${this.baseUrl}/auth/login`, {
+    return fetcher<LoginPayloadDto>(`${this.baseUrl}/auth/login`, {
       headers: this.headers,
       method: "POST",
       body: JSON.stringify({
@@ -55,35 +51,29 @@ export class Client {
   }
 
   public getCurrentUser() {
-    return fetcher<User>(`${this.baseUrl}/v1/auth/me`, {
-      headers: this.privateHeaders,
-    })
-  }
-
-  public getNFTDrops(userId: string) {
-    return fetcher<BaseListResponse<NFTDrop>>(`${this.baseUrl}/users/${userId}/nft-drops`, {
+    return fetcher<UserDto>(`${this.baseUrl}/v1/auth/me`, {
       headers: this.privateHeaders,
     })
   }
 
   public getNFTs(userId: string) {
-    return fetcher<BaseListResponse<NFTMetadata>>(`${this.baseUrl}/users/${userId}/nfts`, {
+    return fetcher<BaseListResponse<NftDto>>(`${this.baseUrl}/users/${userId}/nfts`, {
       headers: this.privateHeaders,
     })
   }
 
-  public createNFTDrop(body: CreateDropRequest) {
-    return fetcher<NFTDrop>(`${this.baseUrl}/nft-drops`, {
+  public createNFT(body: CreateNFTRequest) {
+    return fetcher<NftDto>(`${this.baseUrl}/nfts`, {
       headers: this.privateHeaders,
       method: "POST",
       body: JSON.stringify(body),
     })
   }
 
-  public createNFT(body: CreateNFTRequest) {
-    return fetcher<NFTMetadata>(`${this.baseUrl}/nfts`, {
+  public updateNFT(nftId: string, body: CreateNFTRequest) {
+    return fetcher<NftDto>(`${this.baseUrl}/nfts/${nftId}`, {
       headers: this.privateHeaders,
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(body),
     })
   }
@@ -95,16 +85,30 @@ export class Client {
   }
 
   public getNFT(nftId: string) {
-    return fetcher<NFTMetadata>(`${this.baseUrl}/nfts/${nftId}`, {
+    return fetcher<NftDto>(`${this.baseUrl}/nfts/${nftId}`, {
       headers: this.privateHeaders,
     })
   }
 
-  public getCreateDropTransaction(body: GetCreateDropTXRequest) {
-    return fetcher<{ transaction: string }>(`${this.baseUrl}/drop-methods/get-create-transaction`, {
+  public createDrop(body: CreateNFTDropDto) {
+    return fetcher<any>(`${this.baseUrl}/drops`, {
       headers: this.privateHeaders,
       method: "POST",
       body: JSON.stringify(body),
+    })
+  }
+
+  public getCreateDropTransaction(body: CreateDropTXDto) {
+    return fetcher<{ id: string; transaction: string }>(`${this.baseUrl}/transactions/create-drop-transaction`, {
+      headers: this.privateHeaders,
+      method: "POST",
+      body: JSON.stringify(body),
+    })
+  }
+
+  public checkDropSuffix(suffix: string) {
+    return fetcher<any>(`${this.baseUrl}/drops/check-drop-suffix/${suffix}`, {
+      headers: this.privateHeaders,
     })
   }
 }

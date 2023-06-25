@@ -38,9 +38,7 @@ export const SolanaQRCode = ({
 
       setLoading(true)
       const { location } = window
-      const apiUrl = `${location.protocol}//${
-        location.host
-      }/api/transaction?eventId=${eventId}&name=${eventName}&logo=${logo}}`
+      const apiUrl = `${location.protocol}//${location.host}/api/transaction?eventId=${eventId}&name=${eventName}&logo=${logo}}`
       const urlParams: TransactionRequestURLFields = {
         link: new URL(apiUrl),
         label: eventName,

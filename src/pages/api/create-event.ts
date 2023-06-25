@@ -39,7 +39,7 @@ export default async function handler(req: ExtendedNextApiRequest, res: NextApiR
         return res.status(404).json({ success: false, error: "Event not found" })
       }
 
-      const nftUri = '' //await uploadMetadata(event, creator, keypair)
+      const nftUri = "" //await uploadMetadata(event, creator, keypair)
 
       const { maxDepth, maxBufferSize, canopyDepth } = getTreeOptions(amount)
       console.log("start create tree")
@@ -87,4 +87,3 @@ export default async function handler(req: ExtendedNextApiRequest, res: NextApiR
     return res.status(500).json({ success: false, error: error?.message })
   }
 }
-

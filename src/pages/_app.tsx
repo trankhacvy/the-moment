@@ -8,6 +8,7 @@ import { SolanaProvider } from "@/components/SolanaProvider"
 import { NextPageWithLayout } from "@/types"
 import { Toaster } from "@/components/ui/Toast"
 import { AuthProvider } from "@/libs/auth"
+import { TooltipProvider } from "@/components/ui/Tooltip"
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
@@ -20,7 +21,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
     <SolanaProvider>
       <AuthProvider>
         {/* <SessionProvider session={pageProps.session} refetchInterval={0}> */}
-        {getLayout(<Component {...pageProps} />)}
+        <TooltipProvider delayDuration={100}>{getLayout(<Component {...pageProps} />)}</TooltipProvider>
         <Toaster />
         {/* </SessionProvider> */}
       </AuthProvider>

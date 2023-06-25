@@ -118,9 +118,7 @@ const Header = () => {
         </Typography>
         <Button size="lg">Join Now</Button>
       </motion.div>
-      <div className="absolute right-0 h-[80vh]">
-        
-      </div>
+      <div className="absolute right-0 h-[80vh]"></div>
     </div>
   )
 }

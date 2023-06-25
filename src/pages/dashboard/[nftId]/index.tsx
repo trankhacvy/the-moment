@@ -1,4 +1,4 @@
-import dayjs from "dayjs"
+// import dayjs from "dayjs"
 // import { CalendarDaysIcon, EditIcon, ExternalLinkIcon, MapPinIcon, Share2Icon } from "lucide-react"
 // import { NextPageContext } from "next"
 import Link from "next/link"
@@ -7,7 +7,7 @@ import { useRouter } from "next/router"
 import type { ReactElement } from "react"
 // import useSWR from "swr"
 import { AdminLayout } from "@/components/AdminLayout"
-import { AspectRatio } from "@/components/ui/AspectRatio"
+// import { AspectRatio } from "@/components/ui/AspectRatio"
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs"
 // import { Button } from "@/components/ui/Button"
 // import { IconButton } from "@/components/ui/IconButton"
@@ -18,9 +18,9 @@ import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 // import { authOptions } from "@/utils/authOptions"
 // import { EventDetailTabs } from "@/components/event-detail/EventDetailTabs"
-import { useNFTDrop } from "@/hooks/useNFTDrop"
+// import { useNFTDrop } from "@/hooks/useNFTDrop"
 import { Routes } from "@/config/routes"
-import { NFTDropDetail } from "@/components/drop-detail/NFTDropDetail"
+import { NFTDetail, NFTDetailSkeleton } from "@/components/nft-detail/NFTDetail"
 import { useNFT } from "@/hooks/useNFT"
 
 const EventDetail: NextPageWithLayout = () => {
@@ -62,7 +62,7 @@ const EventDetail: NextPageWithLayout = () => {
         </div>
       </div>
 
-      {isLoading ? <NFTDropSkeleton /> : <NFTDropDetail nft={nft} />}
+      {isLoading ? <NFTDetailSkeleton /> : <NFTDetail nft={nft} />}
 
       {/* {isLoading ? (
         <NFTDropSkeleton />
@@ -138,45 +138,8 @@ const EventDetail: NextPageWithLayout = () => {
   )
 }
 
-const NFTDropSkeleton = () => {
-  return (
-    <div className="flex gap-6">
-      <div className="basis-1/2">
-        <AspectRatio>
-          <Skeleton className="h-full w-full rounded-2xl" />
-        </AspectRatio>
-      </div>
-      <div className="basis-1/2 space-y-4">
-        <Skeleton className="h-12 w-2/3" />
-        <Skeleton className="h-6 w-1/2" />
-        <Skeleton className="h-4 w-1/3" />
-      </div>
-    </div>
-  )
-}
-
 EventDetail.getLayout = function getLayout(page: ReactElement) {
   return <AdminLayout>{page}</AdminLayout>
 }
-
-// export async function getServerSideProps(context: NextPageContext) {
-//   // @ts-ignore
-//   const session = await getServerSession(context.req, context.res, authOptions)
-
-//   if (!session) {
-//     return {
-//       redirect: {
-//         destination: "/",
-//         permanent: false,
-//       },
-//     }
-//   }
-
-//   return {
-//     props: {
-//       session,
-//     },
-//   }
-// }
 
 export default EventDetail

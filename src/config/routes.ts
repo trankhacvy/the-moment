@@ -2,7 +2,10 @@ export const Routes = {
   INDEX: "/",
   LOGIN: "/login",
   REGISTER: "/register",
-  DASHBOARD: "/dashboard",
-  NEW_NFT_DROP: "/dashboard/new-nft-drop",
-  NFT_DROP_DETAIL: (dropId: string) => `/dashboard/${dropId}`,
+  DASHBOARD: "/dashboard/nfts",
+  SETTINGS: "/dashboard/settings",
+  NEW_NFT: "/dashboard/nfts/new",
+  NFT_DETAIL: (nftId: string) => `/dashboard/nfts/${nftId}`,
+  NFT_DETAIL_EDIT: (nftId: string) => `/dashboard/nfts/${nftId}/edit`,
+  NFT_DETAIL_MINT_WEBSITE: (nftId: string) => `/dashboard/nfts/${nftId}/mint-website`,
 }

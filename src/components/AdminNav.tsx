@@ -3,18 +3,19 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { cn } from "@/utils/cn"
 import { Typography } from "@/components/ui/Typography"
+import { Routes } from "@/config/routes"
 
 export type Props = {}
 
 const NavItems = [
   {
-    text: "NFT Drops",
-    href: "/dashboard",
+    text: "NFTs",
+    href: Routes.DASHBOARD,
     icon: <FlameIcon />,
   },
   {
     text: "Settings",
-    href: "/dashboard/settings",
+    href: Routes.SETTINGS,
     icon: <SettingsIcon />,
   },
 ]

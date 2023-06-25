@@ -7,7 +7,6 @@ import { Transaction } from "@solana/web3.js"
 import axios from "axios"
 import { useState } from "react"
 import { Button } from "@/components/ui/Button"
-import { Checkbox } from "@/components/ui/Checkbox"
 import {
   Dialog,
   DialogClose,

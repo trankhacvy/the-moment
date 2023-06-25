@@ -1,55 +1,54 @@
 import cx from "classnames"
 import { ArrowUpIcon, XIcon } from "lucide-react"
-import React, { forwardRef, useState } from "react"
+import React, { forwardRef, useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { IconButton } from "@/components/ui/IconButton"
 import { Typography } from "@/components/ui/Typography"
-import { formatBytes } from "@/utils/number"
+// import { formatBytes } from "@/utils/number"
+
+export type UploaderFile = File & { preview?: string }
 
 export interface UploaderProps {
   maxFiles?: number
   maxSize?: number
-  accept?: Array<string>
+  accept?: Record<string, string[]>
   className?: string
-  onChange: (files: Array<File>) => void
+  onChange: (files: Array<UploaderFile | string>) => void
   isDisabled?: boolean
   onExceedFileCount?: VoidFunction
   onExceedFileSize?: VoidFunction
-  mutiple?: boolean
+  value?: (UploaderFile | string)[]
 }
 
-const DEFAULT_MAX_SIZE_BYTES = 5242880 // 5MB
-const DEFAULT_MAX_FILE_SIZE = 10
+const DEFAULT_MAX_SIZE_BYTES = 5 * 1024 * 1024 // 5MB
+const DEFAULT_MAX_FILE_SIZE = 1
 
 export const Uploader = forwardRef<HTMLDivElement, UploaderProps>((props, ref) => {
   const {
-    maxFiles: maxFilesProps = DEFAULT_MAX_FILE_SIZE,
+    maxFiles = DEFAULT_MAX_FILE_SIZE,
     maxSize = DEFAULT_MAX_SIZE_BYTES,
-    accept = [],
+    accept = { "image/*": [] },
     className,
     onChange,
     isDisabled: isDisabledProp = false,
     onExceedFileCount,
     onExceedFileSize,
-    mutiple = false,
+    value,
     ...rest
   } = props
+  const [files, setFiles] = useState<Array<UploaderFile | string>>(value?.filter(Boolean) ?? [])
 
-  const [files, setFiles] = useState<Array<File & { preview?: string }>>([])
+  const multiple = maxFiles > 1
 
-  const maxFiles = mutiple ? maxFilesProps : 1
-
-  const isDisabled = isDisabledProp || (mutiple && files.length === maxFiles)
+  const isDisabled = isDisabledProp || (multiple && files.length === maxFiles)
 
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles,
     maxSize,
-    accept: {
-      "image/*": accept,
-    },
-    multiple: mutiple,
+    accept,
+    multiple,
     disabled: isDisabled,
-    onDrop: (acceptedFiles, rejectedFiles) => {
+    onDrop: (acceptedFiles: UploaderFile[], rejectedFiles) => {
       if (files.length + acceptedFiles.length + rejectedFiles.length > maxFiles) {
         onExceedFileCount?.()
       } else if (rejectedFiles.some((file) => file.file.size > maxSize)) {
@@ -57,11 +56,13 @@ export const Uploader = forwardRef<HTMLDivElement, UploaderProps>((props, ref) =
       }
 
       const uniqueFiles = acceptedFiles.filter((item) => {
-        return !files.find((file) => file.name === item.name && file.lastModified === item.lastModified)
+        return !files.find(
+          (file) => typeof file !== "string" && file.name === item.name && file.lastModified === item.lastModified
+        )
       })
 
       let newFiles
-      if (!mutiple) {
+      if (!multiple) {
         newFiles = uniqueFiles
           .map((file) =>
             Object.assign(file, {
@@ -85,10 +86,21 @@ export const Uploader = forwardRef<HTMLDivElement, UploaderProps>((props, ref) =
   })
 
   const removeFile = (index: number) => {
-    const newFiles = files.filter((_, i) => i !== index)
-    setFiles(newFiles)
-    onChange(newFiles)
+    if (!multiple) {
+      setFiles([])
+      onChange([])
+    } else {
+      const newFiles = files.filter((_, i) => i !== index)
+      setFiles(newFiles)
+      onChange(newFiles)
+    }
   }
+
+  useEffect(() => {
+    if (value?.length) {
+      setFiles(value.filter(Boolean))
+    }
+  }, [value])
 
   return (
     <>
@@ -98,8 +110,8 @@ export const Uploader = forwardRef<HTMLDivElement, UploaderProps>((props, ref) =
           className: cx(
             "relative cursor-pointer flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-500/20 bg-gray-500/8 hover:opacity-75",
             {
-              "p-10": mutiple || files.length === 0,
-              "px-0 py-[24%]": !mutiple && files.length === 1,
+              "p-10": multiple || files.length === 0,
+              "px-0 py-[24%]": !multiple && files.length === 1,
               "cursor-not-allowed pointer-events-none": isDisabled,
             },
             className
@@ -107,17 +119,22 @@ export const Uploader = forwardRef<HTMLDivElement, UploaderProps>((props, ref) =
           ...rest,
         })}
       >
-        {!mutiple && files.length === 1 && (
+        {!multiple && files.length === 1 && (
           <>
             <div className="absolute left-0 top-0 h-full w-full p-4">
               <div className="h-full w-full overflow-hidden rounded-lg align-bottom">
-                <img alt="preview" src={files?.[0].preview} className="h-auto w-full object-cover align-bottom" />
+                <img
+                  alt="preview"
+                  src={typeof files?.[0] === "string" ? files?.[0] : files?.[0].preview}
+                  className="h-auto w-full object-cover align-bottom"
+                />
               </div>
             </div>
             <IconButton
               onClick={(event) => {
                 event.stopPropagation()
                 setFiles([])
+                onChange([])
               }}
               className="absolute right-6 top-6 bg-gray-900/70 text-white hover:bg-gray-900/70"
               size="sm"
@@ -127,7 +144,7 @@ export const Uploader = forwardRef<HTMLDivElement, UploaderProps>((props, ref) =
           </>
         )}
 
-        {(mutiple || files.length < 1) && (
+        {(multiple || files.length < 1) && (
           <>
             <input {...getInputProps({ disabled: isDisabled })} />
             <div className="flex flex-col items-center justify-center gap-6">
@@ -149,7 +166,7 @@ export const Uploader = forwardRef<HTMLDivElement, UploaderProps>((props, ref) =
         )}
       </div>
 
-      {mutiple && files.length > 0 && (
+      {/* {multiple && files.length > 0 && (
         <div className="flex flex-col gap-2 py-6">
           {files.map((file, index) => (
             <div className="flex items-center gap-4 rounded-lg border border-gray-500/16 px-3 py-2" key={file.name}>
@@ -178,7 +195,7 @@ export const Uploader = forwardRef<HTMLDivElement, UploaderProps>((props, ref) =
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </>
   )
 })

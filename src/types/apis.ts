@@ -201,6 +201,10 @@ export interface TransactionResponseDto {
   transaction: string
 }
 
+export interface SolanaPayPostDto {
+  account: string
+}
+
 export interface CreateTreeDto {
   creator: string
   feePayer: string
@@ -220,6 +224,7 @@ export interface CreateClaimDto {
   /** @format uuid */
   dropId: string
   claimant: string
+  reference: string
   network: string
 }
 
@@ -229,6 +234,20 @@ export interface ClaimDto {
   createdAt: string
   /** @format date-time */
   updatedAt: string
+  nftAddress: string
+  owner: string
+  claimAt: string
+  /** @minLength -1 */
+  signature?: string
+}
+
+export interface SolanaPayClaimGetDto {
+  label: string
+  icon: string
+}
+
+export interface SolanaPayClaimPostDto {
+  account: string
 }
 
 export type AuthControllerUserLoginData = LoginPayloadDto
@@ -345,6 +364,8 @@ export interface HealthCheckerControllerCheckData {
 
 export type NftDropsControllerGetDropData = DropDto
 
+export type NftDropsControllerGetDropBySuffixData = DropDto
+
 export type NftDropsControllerCheckDropSubfixData = DropDto
 
 export type TransactionControllerGetCreateDropTxData = TransactionResponseDto
@@ -358,8 +379,38 @@ export interface TransactionControllerVerifyTransferParams {
 
 export type TransactionControllerVerifyTransferData = any
 
+export interface TransactionControllerGetSolanaPayDropInfoParams {
+  nftName: string
+  nftImage: string
+}
+
+export type TransactionControllerGetSolanaPayDropInfoData = any
+
+export interface TransactionControllerGetSolanaPayTransactionParams {
+  /** @format uuid */
+  dropId: string
+}
+
+export type TransactionControllerGetSolanaPayTransactionData = any
+
 export type TreesControllerCreateTreeData = TransactionResponseDto
 
 export type TreesControllerFindTreeData = TreeDto
 
 export type ClaimsControllerClaimNftData = ClaimDto
+
+export interface ClaimsControllerSolanaClaimGetParams {
+  label: string
+  icon: string
+}
+
+export type ClaimsControllerSolanaClaimGetData = SolanaPayClaimGetDto
+
+export interface ClaimsControllerSolanaClaimPostParams {
+  /** @format uuid */
+  dropId: string
+  network: string
+  reference: string
+}
+
+export type ClaimsControllerSolanaClaimPostData = TransactionResponseDto

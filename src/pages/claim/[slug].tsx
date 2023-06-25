@@ -1,7 +1,8 @@
 import ConnectWalletButton from "@/components/ConnectWalletButton"
+import { NextSeo } from "next-seo"
 import { SolanaQRCode } from "@/components/claim-nft/SolanaPayQRCode"
+import { WalletClaimModal } from "@/components/claim-nft/WalletClaimModal"
 import { AspectRatio } from "@/components/ui/AspectRatio"
-import { DialogTrigger } from "@/components/ui/Dialog"
 import { IconButton } from "@/components/ui/IconButton"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/Tooltip"
 import { Typography } from "@/components/ui/Typography"
@@ -13,16 +14,37 @@ import { MailIcon, QrCodeIcon, WalletIcon } from "lucide-react"
 import { GetStaticProps, InferGetStaticPropsType } from "next"
 import Image from "next/image"
 import { useState } from "react"
+import { useRouter } from "next/router"
+import { APP_BASE_URL } from "@/config/env"
 
 const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const nft = nftDrop.nft as NftDto
   const { setVisible } = useWalletModal()
   const { connected, publicKey } = useWallet()
   const [isOpenQr, setIsOpenQr] = useState(false)
+  const [isClaimWalletOpen, setIsClaimWalletOpen] = useState(false)
+  const { asPath } = useRouter()
 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-20">
-      <ConnectWalletButton className="!absolute !right-6 !top-6" />
+      <NextSeo
+        title={`Claim ${nft.name} NFT | The moment`}
+        description="The moment - The easiest way to claim your POAP on Solana."
+        openGraph={{
+          url: `${APP_BASE_URL}${asPath}`,
+          images: [
+            {
+              width: 1200,
+              height: 630,
+              url: nft.image,
+            },
+          ],
+        }}
+      />
+
+      <div className="!absolute !right-6 !top-6">
+        <ConnectWalletButton />
+      </div>
       <div className="flex flex-col gap-10">
         <div className="w-full max-w-xs rounded-2xl bg-white p-4 shadow-dropdown">
           <AspectRatio className="overflow-hidden rounded-xl">
@@ -59,21 +81,30 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
             }
           />
 
-          <ActionButton
-            description="Claim by wallet"
+          <WalletClaimModal
+            isOpen={isClaimWalletOpen}
+            onOpenChange={setIsClaimWalletOpen}
             trigger={
-              <IconButton
-                onClick={(event) => {
-                  if (!connected || !publicKey) {
-                    event.preventDefault()
-                    setVisible(true)
-                  }
-                }}
-                className="bg-white shadow-dropdown hover:bg-white"
-              >
-                <WalletIcon />
-              </IconButton>
+              <ActionButton
+                description="Claim by wallet"
+                trigger={
+                  <IconButton
+                    onClick={(event) => {
+                      if (!connected || !publicKey) {
+                        event.preventDefault()
+                        setVisible(true)
+                        return
+                      }
+                      setIsClaimWalletOpen(true)
+                    }}
+                    className="bg-white shadow-dropdown hover:bg-white"
+                  >
+                    <WalletIcon />
+                  </IconButton>
+                }
+              />
             }
+            nftDrop={nftDrop}
           />
 
           <ActionButton

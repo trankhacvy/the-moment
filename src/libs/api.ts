@@ -2,6 +2,8 @@ import { BASE_API_URL } from "@/config/common"
 import fetcher from "./fetcher"
 import { BaseListResponse } from "@/types/schema"
 import {
+  ClaimDto,
+  CreateClaimDto,
   CreateDropTXDto,
   CreateNFTDropDto,
   CreateNftDto,
@@ -120,6 +122,14 @@ class Client {
   public getDropBySuffix(suffix: string) {
     return fetcher<DropDto>(`${this.baseUrl}/drops/suffix/${suffix}`, {
       headers: this.headers,
+    })
+  }
+
+  public claimNFT(dto: CreateClaimDto) {
+    return fetcher<ClaimDto>(`${this.baseUrl}/claims`, {
+      headers: this.headers,
+      method: "POST",
+      body: JSON.stringify(dto),
     })
   }
 }

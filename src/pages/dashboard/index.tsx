@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/Button"
 import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
-import { NFTTabs } from "@/components/dashboard/NFTTabs"
 
 const EventsPage: NextPageWithLayout = () => {
   return (
@@ -32,8 +31,6 @@ const EventsPage: NextPageWithLayout = () => {
           </Link>
         </div>
       </div>
-
-      <NFTTabs />
     </>
   )
 }

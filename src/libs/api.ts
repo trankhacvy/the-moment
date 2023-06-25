@@ -1,9 +1,14 @@
+import qs from "query-string"
 import { BASE_API_URL } from "@/config/common"
 import fetcher from "./fetcher"
 import { BaseListResponse } from "@/types/schema"
 import {
   ClaimDto,
-  CreateClaimDto,
+  ClaimsControllerGetClaimsByDropData,
+  ClaimsControllerGetClaimsByDropParams,
+  CreateClaimByEmailDto,
+  CreateClaimByWalletDto,
+  // CreateClaimDto,
   CreateDropTXDto,
   CreateNFTDropDto,
   CreateNftDto,
@@ -12,6 +17,7 @@ import {
   NftDto,
   UpdateNftDto,
   UserDto,
+  WithdrawNFTDto,
 } from "@/types/apis"
 
 type Headers = Record<string, string>
@@ -125,11 +131,47 @@ class Client {
     })
   }
 
-  public claimNFT(dto: CreateClaimDto) {
-    return fetcher<ClaimDto>(`${this.baseUrl}/claims`, {
+  // public claimNFT(dto: CreateClaimDto) {
+  //   return fetcher<ClaimDto>(`${this.baseUrl}/claims`, {
+  //     headers: this.headers,
+  //     method: "POST",
+  //     body: JSON.stringify(dto),
+  //   })
+  // }
+
+  public claimNFTByWallet(dto: CreateClaimByWalletDto) {
+    return fetcher<ClaimDto>(`${this.baseUrl}/claims/wallet`, {
       headers: this.headers,
       method: "POST",
       body: JSON.stringify(dto),
+    })
+  }
+
+  public claimNFTByEmail(dto: CreateClaimByEmailDto) {
+    return fetcher<ClaimDto>(`${this.baseUrl}/claims/email`, {
+      headers: this.headers,
+      method: "POST",
+      body: JSON.stringify(dto),
+    })
+  }
+
+  public withdrawNFT(dto: WithdrawNFTDto) {
+    return fetcher<ClaimDto>(`${this.baseUrl}/claims/withdraw-nft`, {
+      headers: this.headers,
+      method: "POST",
+      body: JSON.stringify(dto),
+    })
+  }
+
+  public getClaimsByEmail(email: string) {
+    return fetcher<ClaimDto[]>(`${this.baseUrl}/claims/${email}`, {
+      headers: this.headers,
+    })
+  }
+
+  public getClaims(query: ClaimsControllerGetClaimsByDropParams) {
+    return fetcher<ClaimsControllerGetClaimsByDropData>(`${this.baseUrl}/claims/drops/all?${qs.stringify(query)}`, {
+      headers: this.headers,
     })
   }
 }

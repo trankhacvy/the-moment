@@ -13,38 +13,41 @@ import { IconButton } from "../ui/IconButton"
 import { XIcon } from "lucide-react"
 import { DropDto, NftDto } from "@/types/apis"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useToast } from "../ui/Toast"
 import { client } from "@/libs/api"
 import { useWallet } from "@solana/wallet-adapter-react"
+import { useSession } from "next-auth/react"
 
-type WalletClaimModalProps = {
+type WithdrawNFTModalProps = {
   trigger: React.ReactNode
-  isOpen?: boolean
-  onOpenChange?: (open: boolean) => void
   nftDrop: DropDto
+  onSuccess?: VoidFunction
 }
 
-export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop }: WalletClaimModalProps) => {
+export const WithdrawNFTModal = ({ trigger, nftDrop, onSuccess }: WithdrawNFTModalProps) => {
   const nft = nftDrop.nft as NftDto
+  const { data: session } = useSession()
+  const { publicKey } = useWallet()
 
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [signature, setSignature] = useState("")
+  const [address, setAddress] = useState("")
   const { toast } = useToast()
-  const { publicKey } = useWallet()
 
   const claim = async () => {
     try {
       if (!publicKey) return
       setLoading(true)
-      const response = await client.claimNFTByWallet({
+      const response = await client.withdrawNFT({
+        email: session?.user?.email ?? "",
+        claimant: publicKey.toBase58() ?? "",
         dropId: nftDrop.id,
-        claimant: publicKey.toBase58(),
         network: "devnet",
       })
-      setSignature(response.signature ?? "")
       setSuccess(true)
+      setAddress(response.nftAddress)
+      onSuccess?.()
     } catch (error: any) {
       console.error(error)
       toast({
@@ -56,15 +59,9 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
     }
   }
 
-  useEffect(() => {
-    if (!isOpen) {
-      setSuccess(false)
-    }
-  }, [isOpen])
-
   return (
     <>
-      <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
+      <AlertDialog>
         <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
         <AlertDialogContent className="max-w-md">
           <AlertDialogDescription className="flex flex-col items-center gap-5">
@@ -89,10 +86,10 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
                 <Button
                   variant="link"
                   as="a"
-                  href={`https://translator.shyft.to/tx/${signature}?cluster=devnet`}
+                  href={`https://translator.shyft.to/address/${address}?cluster=devnet&compressed=true`}
                   target="_blank"
                 >
-                  View the transaction
+                  View NFT
                 </Button>
               </div>
             ) : (

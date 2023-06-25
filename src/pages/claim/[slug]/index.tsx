@@ -10,19 +10,24 @@ import { client } from "@/libs/api"
 import { DropDto, NftDto } from "@/types/apis"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui"
-import { MailIcon, QrCodeIcon, WalletIcon } from "lucide-react"
+import { MailIcon, QrCodeIcon, UserIcon, WalletIcon } from "lucide-react"
 import { GetStaticProps, InferGetStaticPropsType } from "next"
 import Image from "next/image"
 import { useState } from "react"
 import { useRouter } from "next/router"
 import { APP_BASE_URL } from "@/config/env"
+import { signIn, useSession } from "next-auth/react"
+import Link from "next/link"
+import { EmailClaimModal } from "@/components/claim-nft/EmailClaimModal"
 
 const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const { data: session } = useSession()
   const nft = nftDrop.nft as NftDto
   const { setVisible } = useWalletModal()
   const { connected, publicKey } = useWallet()
   const [isOpenQr, setIsOpenQr] = useState(false)
   const [isClaimWalletOpen, setIsClaimWalletOpen] = useState(false)
+  const [isClaimEmailOpen, setIsClaimEmailOpen] = useState(false)
   const { asPath } = useRouter()
 
   return (
@@ -42,11 +47,18 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
         }}
       />
 
-      <div className="!absolute !right-6 !top-6">
+      <div className="!absolute !right-6 !top-6 flex items-center gap-4">
         <ConnectWalletButton />
+        {session && (
+          <Link href={`/claim/${nftDrop.suffix}/profile`}>
+            <IconButton className="bg-warning-500 text-white hover:bg-warning-700">
+              <UserIcon />
+            </IconButton>
+          </Link>
+        )}
       </div>
       <div className="flex flex-col gap-10">
-        <div className="w-full max-w-xs rounded-2xl bg-white p-4 shadow-dropdown">
+        <div className="w-[320px] rounded-2xl bg-white p-4 shadow-dropdown">
           <AspectRatio className="overflow-hidden rounded-xl">
             <Image
               className="transition-transform duration-500 ease-in-out hover:scale-125"
@@ -107,12 +119,29 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
             nftDrop={nftDrop}
           />
 
-          <ActionButton
-            description="Claim by email"
+          <EmailClaimModal
+            isOpen={isClaimEmailOpen}
+            onOpenChange={setIsClaimEmailOpen}
+            nftDrop={nftDrop}
             trigger={
-              <IconButton className="bg-white shadow-dropdown hover:bg-white">
-                <MailIcon />
-              </IconButton>
+              <ActionButton
+                description="Claim by email"
+                trigger={
+                  <IconButton
+                    onClick={(event) => {
+                      if (!session) {
+                        event.preventDefault()
+                        signIn()
+                        return
+                      }
+                      setIsClaimEmailOpen(true)
+                    }}
+                    className="bg-white shadow-dropdown hover:bg-white"
+                  >
+                    <MailIcon />
+                  </IconButton>
+                }
+              />
             }
           />
         </div>

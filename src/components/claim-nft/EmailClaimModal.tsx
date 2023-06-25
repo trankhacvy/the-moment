@@ -16,31 +16,32 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useToast } from "../ui/Toast"
 import { client } from "@/libs/api"
-import { useWallet } from "@solana/wallet-adapter-react"
+import { useSession } from "next-auth/react"
+import Link from "next/link"
 
-type WalletClaimModalProps = {
+type EmailClaimModalProps = {
   trigger: React.ReactNode
   isOpen?: boolean
   onOpenChange?: (open: boolean) => void
   nftDrop: DropDto
 }
 
-export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop }: WalletClaimModalProps) => {
+export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop }: EmailClaimModalProps) => {
   const nft = nftDrop.nft as NftDto
-
+  const { data: session } = useSession()
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
   const [signature, setSignature] = useState("")
   const { toast } = useToast()
-  const { publicKey } = useWallet()
 
   const claim = async () => {
     try {
-      if (!publicKey) return
+      if (!session?.user?.email) return
+
       setLoading(true)
-      const response = await client.claimNFTByWallet({
+      const response = await client.claimNFTByEmail({
         dropId: nftDrop.id,
-        claimant: publicKey.toBase58(),
+        email: session.user?.email,
         network: "devnet",
       })
       setSignature(response.signature ?? "")
@@ -75,7 +76,9 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
             </div>
             {!success && (
               <Typography className="text-center text-gray-900">
-                Click the below button to receive NFT.
+                Click the button below to claim your NFT to your email : <b>{session?.user?.email}</b>.
+                <br /> You will be able to withdraw the NFT
+                <br /> to your wallet at a later time.
                 <br /> No fees or costs are required.
               </Typography>
             )}
@@ -86,13 +89,8 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
                 <Typography as="h6" className="font-bold" level="h6">
                   Congrats 🎉🎉
                 </Typography>
-                <Button
-                  variant="link"
-                  as="a"
-                  href={`https://translator.shyft.to/tx/${signature}?cluster=devnet`}
-                  target="_blank"
-                >
-                  View the transaction
+                <Button as={Link} variant="link" href={`/claim/${nftDrop.suffix}/profile`}>
+                  View in your profile
                 </Button>
               </div>
             ) : (

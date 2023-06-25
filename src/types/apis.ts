@@ -220,12 +220,11 @@ export interface TreeDto {
   updatedAt: string
 }
 
-export interface CreateClaimDto {
+export interface CreateClaimByWalletDto {
   /** @format uuid */
   dropId: string
-  claimant: string
-  reference: string
   network: string
+  claimant: string
 }
 
 export interface ClaimDto {
@@ -236,9 +235,28 @@ export interface ClaimDto {
   updatedAt: string
   nftAddress: string
   owner: string
+  email: string
   claimAt: string
   /** @minLength -1 */
   signature?: string
+  /** @example ["QR_CODE","WALLET","EMAIL"] */
+  method: "QR_CODE" | "WALLET" | "EMAIL"
+  drop?: DropDto
+}
+
+export interface CreateClaimByEmailDto {
+  /** @format uuid */
+  dropId: string
+  network: string
+  email: string
+}
+
+export interface WithdrawNFTDto {
+  email: string
+  claimant: string
+  /** @format uuid */
+  dropId: string
+  network: string
 }
 
 export interface SolanaPayClaimGetDto {
@@ -397,7 +415,13 @@ export type TreesControllerCreateTreeData = TransactionResponseDto
 
 export type TreesControllerFindTreeData = TreeDto
 
-export type ClaimsControllerClaimNftData = ClaimDto
+export type ClaimsControllerClaimByWalletData = ClaimDto
+
+export type ClaimsControllerClaimByEmailData = ClaimDto
+
+export type ClaimsControllerWithdrawNftData = ClaimDto
+
+export type ClaimsControllerGetNfTsData = ClaimDto[]
 
 export interface ClaimsControllerSolanaClaimGetParams {
   label: string
@@ -414,3 +438,26 @@ export interface ClaimsControllerSolanaClaimPostParams {
 }
 
 export type ClaimsControllerSolanaClaimPostData = TransactionResponseDto
+
+export interface ClaimsControllerGetClaimsByDropParams {
+  order?: Order
+  /**
+   * @min 1
+   * @default 1
+   */
+  page?: number
+  /**
+   * @min 1
+   * @max 50
+   * @default 10
+   */
+  take?: number
+  /** @minLength -1 */
+  q?: string
+  /** @format uuid */
+  dropId: string
+}
+
+export type ClaimsControllerGetClaimsByDropData = PageDto & {
+  results?: ClaimDto[]
+}

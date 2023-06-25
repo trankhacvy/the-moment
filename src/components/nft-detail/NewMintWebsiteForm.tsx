@@ -19,6 +19,7 @@ import { Transaction } from "@solana/web3.js"
 import { useToast } from "../ui/Toast"
 import { useRouter } from "next/router"
 import { Routes } from "@/config/routes"
+import { APP_BASE_URL } from "@/config/env"
 
 const WalletMultiButton = dynamic(import("@solana/wallet-adapter-react-ui").then((mod) => mod.WalletMultiButton))
 
@@ -153,7 +154,7 @@ export const NewMintWebsiteForm = ({ nftId }: { nftId: string }) => {
                 </FormControl>
                 <FormMessage />
                 {wSuffix && (
-                  <FormDescription className="line-clamp-2">{`${window.location.hostname}/${slugify(
+                  <FormDescription className="line-clamp-2">{`${APP_BASE_URL}/claim/${slugify(
                     wSuffix
                   )}`}</FormDescription>
                 )}

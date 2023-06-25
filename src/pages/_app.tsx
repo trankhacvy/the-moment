@@ -54,10 +54,10 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
       <SEORender />
       <SolanaProvider>
         <AuthProvider>
-          {/* <SessionProvider session={pageProps.session} refetchInterval={0}> */}
-          <TooltipProvider delayDuration={100}>{getLayout(<Component {...pageProps} />)}</TooltipProvider>
-          <Toaster />
-          {/* </SessionProvider> */}
+          <SessionProvider session={pageProps.session}>
+            <TooltipProvider delayDuration={100}>{getLayout(<Component {...pageProps} />)}</TooltipProvider>
+            <Toaster />
+          </SessionProvider>
         </AuthProvider>
       </SolanaProvider>
     </>

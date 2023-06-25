@@ -55,8 +55,9 @@ const NFTTabs = ({ nft }: NFTTabsProps) => {
         <NFTInfo nft={nft} />
       </TabsContent>
       <TabsContent value="drops">
-        <div className="mx-auto max-w-lg">
+        <div className="mx-auto max-w-2xl">
           {nft?.drops?.map((drop) => (
+            // @ts-ignore
             <DropItem nftDrop={drop} />
           ))}
         </div>

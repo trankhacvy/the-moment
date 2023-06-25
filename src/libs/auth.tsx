@@ -27,7 +27,7 @@ const unprotectedPaths = ["/", "/login", "/register"]
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const { pathname, replace } = useRouter()
-  const [isLoggedIn, setIsLoggedIn] = useState(!unprotectedPaths.includes(pathname))
+  const [isLoggedIn, setIsLoggedIn] = useState(!unprotectedPaths.includes(pathname) || !pathname.startsWith("/claim/"))
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState<User>()
 
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     console.log("isLoggedIn", isLoggedIn)
-    if (!isLoggedIn && !unprotectedPaths.includes(pathname)) {
+    if (!isLoggedIn && !unprotectedPaths.includes(pathname) && !pathname.startsWith("/claim/")) {
       replace("/")
     }
   }, [isLoading, replace, pathname])

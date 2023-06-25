@@ -1,11 +1,16 @@
 import { BASE_API_URL } from "@/config/common"
 import fetcher from "./fetcher"
+import { BaseListResponse } from "@/types/schema"
 import {
-  BaseListResponse,
-  CreateNFTRequest,
-  NFTDrop,
-} from "@/types/schema"
-import { CreateDropTXDto, CreateNFTDropDto, LoginPayloadDto, NftDto, UserDto } from "@/types/apis"
+  CreateDropTXDto,
+  CreateNFTDropDto,
+  CreateNftDto,
+  DropDto,
+  LoginPayloadDto,
+  NftDto,
+  UpdateNftDto,
+  UserDto,
+} from "@/types/apis"
 
 type Headers = Record<string, string>
 
@@ -62,7 +67,7 @@ class Client {
     })
   }
 
-  public createNFT(body: CreateNFTRequest) {
+  public createNFT(body: CreateNftDto) {
     return fetcher<NftDto>(`${this.baseUrl}/nfts`, {
       headers: this.privateHeaders,
       method: "POST",
@@ -70,7 +75,7 @@ class Client {
     })
   }
 
-  public updateNFT(nftId: string, body: CreateNFTRequest) {
+  public updateNFT(nftId: string, body: UpdateNftDto) {
     return fetcher<NftDto>(`${this.baseUrl}/nfts/${nftId}`, {
       headers: this.privateHeaders,
       method: "PUT",
@@ -79,7 +84,7 @@ class Client {
   }
 
   public getNFTDrop(dropId: string) {
-    return fetcher<NFTDrop>(`${this.baseUrl}/nft-drops/${dropId}`, {
+    return fetcher<DropDto>(`${this.baseUrl}/nft-drops/${dropId}`, {
       headers: this.privateHeaders,
     })
   }
@@ -109,6 +114,12 @@ class Client {
   public checkDropSuffix(suffix: string) {
     return fetcher<any>(`${this.baseUrl}/drops/check-drop-suffix/${suffix}`, {
       headers: this.privateHeaders,
+    })
+  }
+
+  public getDropBySuffix(suffix: string) {
+    return fetcher<DropDto>(`${this.baseUrl}/drops/suffix/${suffix}`, {
+      headers: this.headers,
     })
   }
 }

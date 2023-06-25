@@ -204,7 +204,3 @@ const Actions = ({ trigger, nftId }: ActionsProps) => {
     </Popover>
   )
 }
-
-const Empty = () => {
-  return <div className="flex items-center justify-center p-6">No whitelist found</div>
-}

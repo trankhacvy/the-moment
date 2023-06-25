@@ -16,7 +16,7 @@ const TooltipContent = React.forwardRef<
     ref={ref}
     sideOffset={sideOffset}
     className={cn(
-      "z-50 overflow-hidden rounded-xl bg-white px-3 py-2 text-sm text-gray-800 shadow-dropdown",
+      "z-50 overflow-hidden rounded-xl bg-gray-800 px-3 py-2 text-sm text-white shadow-dropdown",
       "animate-in fade-in-50",
       "data-[side=bottom]:slide-in-from-top-1 data-[side=left]:slide-in-from-right-1 data-[side=right]:slide-in-from-left-1 data-[side=top]:slide-in-from-bottom-1",
       className
@@ -24,7 +24,7 @@ const TooltipContent = React.forwardRef<
     {...props}
   >
     {children}
-    <TooltipPrimitive.Arrow className="fill-white" />
+    <TooltipPrimitive.Arrow className="fill-gray-800" />
   </TooltipPrimitive.Content>
 ))
 

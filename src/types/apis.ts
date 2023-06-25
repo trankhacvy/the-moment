@@ -92,28 +92,6 @@ export interface CreateNftDto {
   }[]
 }
 
-export interface DropDto {
-  id: string
-  /** @format date-time */
-  createdAt: string
-  /** @format date-time */
-  updatedAt: string
-  amount: number
-  /** @example ["WEBSITE","MINT_LINK","SECRET","WHITELIST"] */
-  method: "WEBSITE" | "MINT_LINK" | "SECRET" | "WHITELIST"
-  suffix: string
-  /**
-   * @format date-time
-   * @minLength -1
-   */
-  startAt?: string
-  /**
-   * @format date-time
-   * @minLength -1
-   */
-  endAt?: string
-}
-
 export interface NftDto {
   id: string
   /** @format date-time */
@@ -134,7 +112,7 @@ export interface NftDto {
   collectionAddress?: string
   sellerFeeBasisPoints?: number
   attributes?: object
-  drops?: DropDto[]
+  drops?: any[][]
 }
 
 export interface UpdateNftDto {
@@ -186,6 +164,29 @@ export interface GetCreationDropTransaction {
   nftId: string
   amount: number
   owner: string
+}
+
+export interface DropDto {
+  id: string
+  /** @format date-time */
+  createdAt: string
+  /** @format date-time */
+  updatedAt: string
+  amount: number
+  /** @example ["WEBSITE","MINT_LINK","SECRET","WHITELIST"] */
+  method: "WEBSITE" | "MINT_LINK" | "SECRET" | "WHITELIST"
+  suffix: string
+  /**
+   * @format date-time
+   * @minLength -1
+   */
+  startAt?: string
+  /**
+   * @format date-time
+   * @minLength -1
+   */
+  endAt?: string
+  nft?: NftDto
 }
 
 export interface CreateDropTXDto {
@@ -341,6 +342,8 @@ export interface HealthCheckerControllerCheckData {
     }
   >
 }
+
+export type NftDropsControllerGetDropData = DropDto
 
 export type NftDropsControllerCheckDropSubfixData = DropDto
 

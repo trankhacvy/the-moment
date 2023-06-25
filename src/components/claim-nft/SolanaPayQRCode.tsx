@@ -15,33 +15,32 @@ import {
 } from "@/components/ui/AlertDialog"
 import { AspectRatio } from "@/components/ui/AspectRatio"
 import { IconButton } from "@/components/ui/IconButton"
+import { DropDto } from "@/types/apis"
+import { BASE_API_URL } from "@/config/common"
 
-export const SolanaQRCode = ({
-  eventId,
-  eventName,
-  logo,
-  trigger,
-}: {
-  eventId: string
-  eventName: string
-  logo: string
+interface SolanaQRCodeProps {
+  isOpen?: boolean
+  onOpenChange?: (isOpen: boolean) => void
+  nftDrop: DropDto
   trigger: React.ReactNode
-}) => {
+}
+
+export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQRCodeProps) => {
   const reference = useMemo(() => Keypair.generate().publicKey, [])
-  const [open, setIsOpen] = useState(false)
+  // const [open, setIsOpen] = useState(false)
   const qrRef = useRef<HTMLDivElement>(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setTimeout(() => {
-      if (!eventId || !open || !qrRef.current) return
+      if (!nftDrop || !isOpen || !qrRef.current) return
 
       setLoading(true)
-      const { location } = window
-      const apiUrl = `${location.protocol}//${location.host}/api/transaction?eventId=${eventId}&name=${eventName}&logo=${logo}}`
+      const apiUrl = `${BASE_API_URL}/claims/solana-pay?dropId=${nftDrop.id}&label=${nftDrop.nft?.name}&icon=${nftDrop.nft?.image}}&network=devnet`
+      console.log("apiUrl", apiUrl)
       const urlParams: TransactionRequestURLFields = {
         link: new URL(apiUrl),
-        label: eventName,
+        label: nftDrop.nft?.name,
         message: "Thank you for participating in our event",
       }
       const solanaUrl = encodeURL(urlParams)
@@ -52,10 +51,10 @@ export const SolanaQRCode = ({
         setLoading(false)
       }
     }, 100)
-  }, [open, qrRef])
+  }, [isOpen, nftDrop, qrRef])
 
   return (
-    <AlertDialog open={open} onOpenChange={setIsOpen}>
+    <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
       <AlertDialogContent className="max-w-lg">
         <AlertDialogHeader>

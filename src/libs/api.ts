@@ -19,6 +19,7 @@ import {
   UserDto,
   WithdrawNFTDto,
 } from "@/types/apis"
+import { API_BASE_URL } from "@/config/env"
 
 type Headers = Record<string, string>
 
@@ -31,7 +32,7 @@ class Client {
     ...this.headers,
   }
 
-  baseUrl: string = BASE_API_URL
+  baseUrl: string = API_BASE_URL
 
   public get formDataHeaders(): Headers {
     const cloned = Object.assign({}, this.privateHeaders)

@@ -1,84 +1,94 @@
-import { Header } from "@/components/Header"
-import { AspectRatio } from "@/components/ui/AspectRatio"
-import { Button } from "@/components/ui/Button"
-import { Typography } from "@/components/ui/Typography"
-import Image from "next/image"
+import bs58 from "bs58"
+import { SigninMessage } from "@/utils/SigninMessage"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import { getCsrfToken, signIn, useSession } from "next-auth/react"
+import { useEffect, useState } from "react"
+import { Routes } from "@/config/routes"
 
 const HomePage = () => {
+  const { status } = useSession()
+  const { connected, publicKey, signMessage } = useWallet()
+  const { setVisible } = useWalletModal()
+  const [openModal, setOpenModal] = useState(false)
+
+  const handleSignIn = async () => {
+    try {
+      if (!connected) {
+        setVisible(true)
+      }
+      const csrf = await getCsrfToken()
+      if (!publicKey || !csrf || !signMessage) return
+
+      const message = new SigninMessage({
+        domain: window.location.host,
+        publicKey: publicKey?.toBase58(),
+        statement: `Sign this message to sign in to the app.`,
+        nonce: csrf,
+      })
+
+      const data = new TextEncoder().encode(message.prepare())
+      const signature = await signMessage(data)
+      const serializedSignature = bs58.encode(signature)
+
+      signIn("credentials", {
+        message: JSON.stringify(message),
+        signature: serializedSignature,
+        callbackUrl: Routes.DASHBOARD,
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    if (connected && status === "unauthenticated" && openModal) {
+      handleSignIn()
+    }
+  }, [connected, status, openModal])
+
   return (
-    <>
-      <Header />
-      <main className="flex flex-col overflow-hidden bg-gray-900 py-28 pb-20 lg:min-h-screen lg:items-center lg:justify-center lg:pb-28">
-        <div className="mx-auto w-full max-w-[1200px] px-4 md:px-6">
-          <div className="flex flex-col items-center justify-between lg:flex-row">
-            <div className="w-full grow-0 text-center lg:w-1/2 lg:text-left xl:w-5/12">
-              <Typography as="h1" level="h2" className="mb-6 font-bold text-white">
-                Get The Career you deserve
-              </Typography>
-              <Typography as="p" className="text-white">
-                Etiam sollicitudin, ipsum eu pulvinar rutrum, tellus ipsum laoreet sapien, quis venenatis ante odio sit
-                amet eros.
-              </Typography>
-              <Button className="mt-10">Try Now</Button>
-            </div>
-            <div className="w-full grow-0 lg:flex lg:w-1/2 lg:justify-end">
-              <div className="w-full max-w-[564px] overflow-hidden rounded-2xl">
-                <AspectRatio>
-                  <Image src="/assets/hero.jpg" alt="logo" fill />
-                </AspectRatio>
-              </div>
-            </div>
-          </div>
+    <section className="min-h-screen bg-gray-900">
+      <div className="mx-auto grid max-w-screen-xl px-4 py-8 lg:grid-cols-12 lg:gap-8 lg:py-16 xl:gap-0">
+        <div className="mr-auto place-self-center lg:col-span-7">
+          <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl xl:text-6xl">
+            Gasless <span className="text-primary-500">POAP</span> Dispenser on Solana
+          </h1>
+          <p className="mb-6 max-w-2xl font-light text-gray-400 md:text-lg lg:mb-8 lg:text-xl">
+            Effortlessly create and distribute POAPs with cost-effective compressed NFT
+          </p>
+          <button
+            onClick={() => {
+              if (!connected) {
+                setVisible(true)
+                setOpenModal(true)
+                return
+              }
+              handleSignIn()
+            }}
+            className="mr-3 inline-flex items-center justify-center rounded-lg bg-primary-500 px-5 py-3 text-center text-base font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
+          >
+            Get started
+            <svg
+              className="-mr-1 ml-2 h-5 w-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
         </div>
-      </main>
-    </>
+        <div className="hidden lg:col-span-5 lg:mt-0 lg:flex">
+          <img className="" src="/assets/nft-logo.png" alt="hero" />
+        </div>
+      </div>
+    </section>
   )
 }
-
-// import { AspectRatio } from "@/components/ui/AspectRatio"
-// import { Typography } from "@/components/ui/Typography"
-// import { ArrowRightIcon } from "lucide-react"
-// import Image from "next/image"
-// import Link from "next/link"
-
-// const HomePage = () => {
-//   return (
-//     <div className="relative min-h-screen w-full">
-//       <div className="absolute inset-0">
-//         <Image className="z-[-1]" alt="banner" src="/assets/background.jpg" fill />
-//       </div>
-//       <div className="container mx-auto px-6 py-10">
-//         <div className="glass-card flex min-h-[600px] flex-wrap items-center rounded-[40px]">
-//           <div className="w-[calc(100%*6/12)] grow-0 basis-[auto] pl-6">
-//             <div className="py-24">
-//               <Typography as="h1" level="h2" className="mb-6 font-bold leading-tight text-white">
-//                 Mint POAPs
-//                 <br /> Without Paying Fees
-//                 <br /> With Moment
-//               </Typography>
-//               <Typography level="body1" className="mb-10 text-white">
-//                 The Moment is the first gasless POAP dispenser on
-//                 <br /> Solana blockchain
-//               </Typography>
-//               <Link href="/login">
-//                 <button className="v relative inline-flex items-center gap-2 rounded-2xl bg-white/25 px-8 py-2.5 font-bold text-white hover:bg-[radial-gradient(50%_50%_at_50%_50%,rgba(255,255,255,0.35)_0%,rgba(255,255,255,0)_100%)]">
-//                   Create now
-//                   <ArrowRightIcon />
-//                 </button>
-//               </Link>
-//             </div>
-//           </div>
-//           <div className="w-[calc(100%*6/12)] grow-0 basis-[auto] px-6">
-//             <div className="mx-auto w-[80%]">
-//               <AspectRatio className="overflow-hidden rounded-3xl">
-//                 <Image className="z-[-1]" alt="hero" src="/assets/hero.jpg" fill />
-//               </AspectRatio>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
 
 export default HomePage

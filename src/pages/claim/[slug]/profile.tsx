@@ -15,7 +15,7 @@ import { WithdrawNFTModal } from "@/components/claim-nft/WithdrawNftModal"
 
 const ProfilePage = () => {
   const { data: session } = useSession()
-  const { claims, isLoading, mutate } = useGetClaimsByEmail(session?.user?.email as string | undefined)
+  const { claims, isLoading, mutate } = useGetClaimsByEmail(session?.user?.user.email as string | undefined)
 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-20">

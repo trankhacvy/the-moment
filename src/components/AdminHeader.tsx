@@ -30,9 +30,6 @@ const AdminHeader = () => {
         <IconButton className="mr-2 lg:hidden" size="sm">
           <MenuIcon />
         </IconButton>
-        {/* <IconButton size="sm">
-          <SearchIcon />
-        </IconButton> */}
         <div className="flex grow items-center justify-end gap-2">
           <AdminUserMenu />
         </div>

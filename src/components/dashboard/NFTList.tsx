@@ -1,13 +1,12 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
 import { useNFTs } from "@/hooks/useNFTs"
-import { useAuthContext } from "@/libs/auth"
 import { NFTItem, NFTItemSkeleton } from "./NFTItem"
+import { useSession } from "next-auth/react"
 
-type NFTListProps = {}
+export type NFTListProps = {}
 
-export const NFTList = (props: NFTListProps) => {
-  const { user } = useAuthContext()
-  const { nfts, isLoading } = useNFTs(user?.id)
+export const NFTList = () => {
+  const { data: session } = useSession()
+  const { nfts, isLoading } = useNFTs(session?.user?.user.id)
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

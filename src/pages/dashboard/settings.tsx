@@ -4,6 +4,8 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
 import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
+import { Routes } from "@/config/routes"
+import Link from "next/link"
 
 const SettingsPage: NextPageWithLayout = () => {
   return (
@@ -13,11 +15,11 @@ const SettingsPage: NextPageWithLayout = () => {
           Settings
         </Typography>
         <Breadcrumbs aria-label="Settings" separator={<span className="mx-2 h-1 w-1 rounded-sm bg-gray-500" />}>
-          <a href="/dashboard">
+          <Link href={Routes.DASHBOARD}>
             <Typography as="span" level="body4">
               Dashboard
             </Typography>
-          </a>
+          </Link>
           <Typography as="span" level="body4" color="secondary">
             Settings
           </Typography>

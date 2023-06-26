@@ -40,7 +40,7 @@ export const WithdrawNFTModal = ({ trigger, nftDrop, onSuccess }: WithdrawNFTMod
       if (!publicKey) return
       setLoading(true)
       const response = await client.withdrawNFT({
-        email: session?.user?.email ?? "",
+        email: session?.user?.user.email ?? "",
         claimant: publicKey.toBase58() ?? "",
         dropId: nftDrop.id,
         network: "devnet",

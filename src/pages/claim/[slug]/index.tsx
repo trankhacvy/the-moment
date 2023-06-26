@@ -19,6 +19,7 @@ import { APP_BASE_URL } from "@/config/env"
 import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
 import { EmailClaimModal } from "@/components/claim-nft/EmailClaimModal"
+import { siteConfig } from "@/config/site"
 
 const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data: session } = useSession()
@@ -33,8 +34,8 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-20">
       <NextSeo
-        title={`Claim ${nft.name} NFT | The moment`}
-        description="The moment - The easiest way to claim your POAP on Solana."
+        title={`Claim ${nft.name} NFT | ${siteConfig.name}`}
+        description={`${siteConfig.name} - The easiest way to claim your POAP on Solana.`}
         openGraph={{
           url: `${APP_BASE_URL}${asPath}`,
           images: [
@@ -131,7 +132,7 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
                     onClick={(event) => {
                       if (!session) {
                         event.preventDefault()
-                        signIn()
+                        signIn("github")
                         return
                       }
                       setIsClaimEmailOpen(true)

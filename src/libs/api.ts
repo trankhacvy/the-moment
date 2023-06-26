@@ -64,6 +64,16 @@ class Client {
     })
   }
 
+  public walletLogin(wallet: string) {
+    return fetcher<LoginPayloadDto>(`${this.baseUrl}/auth/wallet-login`, {
+      headers: this.headers,
+      method: "POST",
+      body: JSON.stringify({
+        wallet,
+      }),
+    })
+  }
+
   public getCurrentUser() {
     return fetcher<UserDto>(`${this.baseUrl}/v1/auth/me`, {
       headers: this.privateHeaders,

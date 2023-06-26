@@ -36,12 +36,12 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
 
   const claim = async () => {
     try {
-      if (!session?.user?.email) return
+      if (!session?.user?.user.email) return
 
       setLoading(true)
       const response = await client.claimNFTByEmail({
         dropId: nftDrop.id,
-        email: session.user?.email,
+        email: session.user?.user.email,
         network: "devnet",
       })
       setSignature(response.signature ?? "")
@@ -76,7 +76,7 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
             </div>
             {!success && (
               <Typography className="text-center text-gray-900">
-                Click the button below to claim your NFT to your email : <b>{session?.user?.email}</b>.
+                Click the button below to claim your NFT to your email : <b>{session?.user?.user.email}</b>.
                 <br /> You will be able to withdraw the NFT
                 <br /> to your wallet at a later time.
                 <br /> No fees or costs are required.

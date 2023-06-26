@@ -17,6 +17,7 @@ import { MAX_FILE_SIZE } from "@/config/image"
 import { NftDto } from "@/types/apis"
 import { useEffect } from "react"
 import { Routes } from "@/config/routes"
+import { Alert, AlertTitle } from "../ui/Alert"
 
 const MAX_NAME_LENGTH = 32
 const MAX_SYMBOL_LENGTH = 10
@@ -144,9 +145,9 @@ export const NewNFTForm = ({ isEdit = false, nft }: NewNFTFormProps) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-4 gap-x-6 gap-y-8">
         <NFTForm />
-        <div className="col-span-2 col-start-3 flex justify-end">
-          <Button type="submit" className="px-8" loading={form.formState.isSubmitting}>
-            {isEdit ? "Edit NFT" : "Create NFT"}
+        <div className="col-span-2 col-start-3 flex flex-col items-end justify-end">
+          <Button type="submit" loading={form.formState.isSubmitting}>
+            {isEdit ? "Edit NFT" : "Create free NFT"}
           </Button>
         </div>
       </form>

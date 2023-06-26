@@ -30,7 +30,6 @@ interface SolanaQRCodeProps {
 export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQRCodeProps) => {
   const reference = useMemo(() => Keypair.generate().publicKey, [])
   const qrRef = useRef<HTMLDivElement>(null)
-  const [loading, setLoading] = useState(false)
   const [processing, setProcessing] = useState(false)
   const [success, setSuccess] = useState(false)
   const [signature, setSignature] = useState("")
@@ -40,7 +39,6 @@ export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQ
     setTimeout(() => {
       if (!nftDrop || !isOpen || !qrRef.current || !reference) return
 
-      setLoading(true)
       const apiUrl = `${BASE_API_URL}/claims/solana-pay?dropId=${nftDrop.id}&label=${nftDrop.nft?.name}&icon=${
         nftDrop.nft?.image
       }}&network=devnet&reference=${reference.toBase58()}`
@@ -55,7 +53,6 @@ export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQ
       if (qrRef.current) {
         qrRef.current.innerHTML = ""
         qr.append(qrRef.current)
-        setLoading(false)
       }
     }, 100)
   }, [isOpen, nftDrop, qrRef, reference])
@@ -103,7 +100,7 @@ export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQ
             <AlertDialogTitle>Scan QR Code</AlertDialogTitle>
           </AlertDialogHeader>
         )}
-        <AlertDialogDescription>
+        <div>
           {!processing ? (
             <AspectRatio className="overflow-hidden">
               <div ref={qrRef} className="qr-container h-full w-full rounded-2xl" />
@@ -149,12 +146,12 @@ export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQ
               </div>
               {success ? (
                 <div className="mt-2 flex flex-col gap-2 text-center">
-                  <Typography color="success" as="h6" level="h6" className="font-bold">
-                    You've make it
+                  <Typography as="h6" level="h5" className="font-bold">
+                    Congrats 🎉🎉
                   </Typography>
-                  <Typography>Transaction success</Typography>
+                  <Typography color="secondary">You've successfully claimed the NFT</Typography>
                   <a
-                    className="text-gray-900 hover:underline"
+                    className="text-gray-900 underline"
                     target="_blank"
                     href={`https://translator.shyft.to/tx/${signature}?cluster=devnet`}
                   >
@@ -168,7 +165,7 @@ export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQ
               )}
             </div>
           )}
-        </AlertDialogDescription>
+        </div>
         {!processing && (
           <AlertDialogFooter className="!justify-center">
             <Typography>Scan this QR Code to receive your POAP</Typography>
@@ -178,7 +175,7 @@ export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQ
           <IconButton
             size="sm"
             color="default"
-            className="absolute right-2 top-2 border-none text-gray-800 shadow-none hover:bg-gray-800/8"
+            className="absolute right-2 top-2 border-none text-gray-800 shadow-none hover:bg-gray-800/8 focus:ring-0"
           >
             <XIcon />
             <span className="sr-only">Close</span>

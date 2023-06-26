@@ -67,23 +67,23 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
       <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
         <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
         <AlertDialogContent className="max-w-md">
-          <AlertDialogDescription className="flex flex-col items-center gap-5">
+          <div className="flex flex-col items-center gap-5">
             <div className="w-40 overflow-hidden rounded-full">
               <AspectRatio>
                 <Image fill alt={nft.name} className="rounded-2xl" src={nft.image} />
               </AspectRatio>
             </div>
             {!success && (
-              <Typography className="text-center text-gray-900">
+              <Typography className="text-center font-semibold">
                 Click the below button to receive NFT.
                 <br /> No fees or costs are required.
               </Typography>
             )}
-          </AlertDialogDescription>
+          </div>
           <AlertDialogFooter>
             {success ? (
               <div className="flex w-full flex-col items-center justify-center">
-                <Typography as="h6" className="font-bold" level="h6">
+                <Typography as="h6" className="font-bold" level="h5">
                   Congrats 🎉🎉
                 </Typography>
                 <Button
@@ -91,6 +91,7 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
                   as="a"
                   href={`https://translator.shyft.to/tx/${signature}?cluster=devnet`}
                   target="_blank"
+                  className="underline"
                 >
                   View the transaction
                 </Button>
@@ -105,7 +106,7 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
             <IconButton
               size="sm"
               color="default"
-              className="absolute right-2 top-2 border-none text-gray-800 shadow-none hover:bg-gray-800/8"
+              className="absolute right-2 top-2 border-none text-gray-800 shadow-none hover:bg-gray-800/8 focus:ring-0"
             >
               <XIcon />
               <span className="sr-only">Close</span>

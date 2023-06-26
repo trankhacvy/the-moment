@@ -47,7 +47,6 @@ export const WithdrawNFTModal = ({ trigger, nftDrop, onSuccess }: WithdrawNFTMod
       })
       setSuccess(true)
       setAddress(response.nftAddress)
-      onSuccess?.()
     } catch (error: any) {
       console.error(error)
       toast({
@@ -56,6 +55,7 @@ export const WithdrawNFTModal = ({ trigger, nftDrop, onSuccess }: WithdrawNFTMod
       })
     } finally {
       setLoading(false)
+      onSuccess?.()
     }
   }
 

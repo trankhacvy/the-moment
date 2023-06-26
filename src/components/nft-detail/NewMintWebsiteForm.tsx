@@ -20,17 +20,20 @@ import { useToast } from "../ui/Toast"
 import { useRouter } from "next/router"
 import { Routes } from "@/config/routes"
 import { APP_BASE_URL } from "@/config/env"
+import { CreateDropConfirmModal } from "./CreateDropConfirmModal"
+import { useState } from "react"
 
 const WalletMultiButton = dynamic(import("@solana/wallet-adapter-react-ui").then((mod) => mod.WalletMultiButton))
 
-enum Duration {
+export enum Duration {
   TEN_MIN = "10 min",
   THIRTY_MIN = "30 min",
   ONE_HOUR = "1 hour",
   CUSTOM = "Custom",
 }
 
-const schema = z
+// @ts-ignore
+export const newMintWebsiteSchema = z
   .object({
     amount: z.coerce
       .number({
@@ -57,8 +60,8 @@ const schema = z
   )
 
 export const NewMintWebsiteForm = ({ nftId }: { nftId: string }) => {
-  const methods = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const methods = useForm<z.infer<typeof newMintWebsiteSchema>>({
+    resolver: zodResolver(newMintWebsiteSchema),
     defaultValues: {
       startDate: "",
       endDate: "",
@@ -71,11 +74,12 @@ export const NewMintWebsiteForm = ({ nftId }: { nftId: string }) => {
   const { connection } = useConnection()
   const { toast } = useToast()
   const { replace } = useRouter()
+  const [isOpen, setIsOpen] = useState(false)
 
   const wSuffix = watch("suffix")
   const wDuration = watch("duration")
 
-  const onSubmit = async (values: z.infer<typeof schema>) => {
+  const onSubmit = async (values: z.infer<typeof newMintWebsiteSchema>) => {
     try {
       if (!publicKey) return
 
@@ -111,12 +115,14 @@ export const NewMintWebsiteForm = ({ nftId }: { nftId: string }) => {
       }
 
       await client.createDrop(body)
+      setIsOpen(false)
       replace(Routes.NFT_DETAIL(nftId))
       toast({
         variant: "success",
         title: "Success",
       })
     } catch (error: any) {
+      setIsOpen(false)
       console.error(error)
       toast({
         variant: "error",
@@ -125,9 +131,14 @@ export const NewMintWebsiteForm = ({ nftId }: { nftId: string }) => {
     }
   }
 
+  const onOpenConfirm = async (_: z.infer<typeof newMintWebsiteSchema>, event: any) => {
+    console.log("heheh")
+    setIsOpen(true)
+  }
+
   return (
     <Form {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-lg gap-6 rounded-2xl p-6 shadow-card">
+      <form onSubmit={handleSubmit(onOpenConfirm)} className="mx-auto max-w-lg gap-6 rounded-2xl p-6 shadow-card">
         <div className="mb-6 flex flex-col gap-5">
           <FormField
             control={control}
@@ -268,9 +279,10 @@ export const NewMintWebsiteForm = ({ nftId }: { nftId: string }) => {
             Create
           </Button> */}
           {publicKey ? (
-            <Button loading={formState.isSubmitting} type="submit">
-              Create
-            </Button>
+            <>
+              <CreateDropConfirmModal onSubmit={onSubmit} isOpen={isOpen} onOpenChange={setIsOpen} />
+              <Button type="submit">Create</Button>
+            </>
           ) : (
             <WalletMultiButton />
           )}

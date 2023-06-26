@@ -5,7 +5,7 @@ import { signOut, useSession } from "next-auth/react"
 import { Routes } from "@/config/routes"
 
 export const AdminLayout = ({ children }: PropsWithChildren) => {
-  const { status } = useSession()
+  const { status, data } = useSession()
 
   if (status === "loading") {
     return (

@@ -30,8 +30,9 @@ const HomePage = () => {
       const data = new TextEncoder().encode(message.prepare())
       const signature = await signMessage(data)
       const serializedSignature = bs58.encode(signature)
+      console.log("prepare")
 
-      signIn("credentials", {
+      await signIn("credentials", {
         message: JSON.stringify(message),
         signature: serializedSignature,
         callbackUrl: Routes.DASHBOARD,

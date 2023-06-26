@@ -40,8 +40,6 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
           url: `${APP_BASE_URL}${asPath}`,
           images: [
             {
-              width: 1200,
-              height: 630,
               url: nft.image,
             },
           ],
@@ -59,7 +57,7 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
         )}
       </div>
       <div className="flex flex-col gap-10">
-        <div className="w-[320px] rounded-2xl bg-white p-4 shadow-dropdown">
+        <div className="w-[360px] rounded-2xl bg-white p-4 shadow-dropdown">
           <AspectRatio className="overflow-hidden rounded-xl">
             <Image
               className="transition-transform duration-500 ease-in-out hover:scale-125"

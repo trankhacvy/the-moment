@@ -2,7 +2,6 @@ import { Typography } from "@/components/ui/Typography"
 import {
   AlertDialog,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogTrigger,
   AlertDialogCancel,
@@ -68,28 +67,27 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
       <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
         <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
         <AlertDialogContent className="max-w-md">
-          <AlertDialogDescription className="flex flex-col items-center gap-5">
+          <div className="flex flex-col items-center gap-5">
             <div className="w-40 overflow-hidden rounded-full">
               <AspectRatio>
                 <Image fill alt={nft.name} className="rounded-2xl" src={nft.image} />
               </AspectRatio>
             </div>
             {!success && (
-              <Typography className="text-center text-gray-900">
-                Click the button below to claim your NFT to your email : <b>{session?.user?.user.email}</b>.
-                <br /> You will be able to withdraw the NFT
-                <br /> to your wallet at a later time.
+              <Typography className="text-center">
+                Click the button below to claim your NFT to your email <b>{session?.user?.user.email}</b>. You will be
+                able to withdraw the NFT to your wallet at a later time.
                 <br /> No fees or costs are required.
               </Typography>
             )}
-          </AlertDialogDescription>
+          </div>
           <AlertDialogFooter>
             {success ? (
               <div className="flex w-full flex-col items-center justify-center">
-                <Typography as="h6" className="font-bold" level="h6">
+                <Typography as="h6" className="font-bold" level="h5">
                   Congrats 🎉🎉
                 </Typography>
-                <Button as={Link} variant="link" href={`/claim/${nftDrop.suffix}/profile`}>
+                <Button className="underline" as={Link} variant="link" href={`/claim/${nftDrop.suffix}/profile`}>
                   View in your profile
                 </Button>
               </div>
@@ -103,7 +101,7 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
             <IconButton
               size="sm"
               color="default"
-              className="absolute right-2 top-2 border-none text-gray-800 shadow-none hover:bg-gray-800/8"
+              className="absolute right-2 top-2 border-none text-gray-800 shadow-none hover:bg-gray-800/8 focus:ring-0"
             >
               <XIcon />
               <span className="sr-only">Close</span>

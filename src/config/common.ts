@@ -3,3 +3,5 @@ export const DEFAULT_USER_AVATAR =
 
 export const BASE_API_URL = "https://poap-backend-production.up.railway.app"
 // export const BASE_API_URL = "http://localhost:8080"
+
+export const NFT_PRICE = 0.005

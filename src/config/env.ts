@@ -7,7 +7,7 @@ export const SUPABASE_API_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 export const NEXTAUTH_URL = process.env.NEXTAUTH_URL!
 export const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET!
 
-export const SOLANA_ENV = process.env.NEXT_PUBLIC_SOLANA_ENV!
+export const SOLANA_NETWORK = process.env.NEXT_PUBLIC_SOLANA_NETWORK!
 export const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC!
 export const BUNDLR_NETWORK_URL = process.env.NEXT_PUBLIC_BUNDLR_NETWORK!
 export const MASTER_WALLET = process.env.MASTER_WALLET!

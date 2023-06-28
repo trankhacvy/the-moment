@@ -1,4 +1,3 @@
-import ConnectWalletButton from "@/components/ConnectWalletButton"
 import { NextSeo } from "next-seo"
 import { SolanaQRCode } from "@/components/claim-nft/SolanaPayQRCode"
 import { WalletClaimModal } from "@/components/claim-nft/WalletClaimModal"

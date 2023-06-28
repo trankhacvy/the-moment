@@ -15,6 +15,7 @@ import {
   DropDto,
   LoginPayloadDto,
   NftDto,
+  SocialUserRegisterDto,
   UpdateNftDto,
   UserDto,
   WithdrawNFTDto,
@@ -71,6 +72,14 @@ class Client {
       body: JSON.stringify({
         wallet,
       }),
+    })
+  }
+
+  public socialLogin(dto: SocialUserRegisterDto) {
+    return fetcher<LoginPayloadDto>(`${this.baseUrl}/auth/social-login`, {
+      headers: this.headers,
+      method: "POST",
+      body: JSON.stringify(dto),
     })
   }
 

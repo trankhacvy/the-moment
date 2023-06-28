@@ -1,16 +1,9 @@
-import GitHubProvider from "next-auth/providers/github"
+import GitHubProvider, { GithubProfile } from "next-auth/providers/github"
 import { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { NEXTAUTH_SECRET } from "@/config/env"
 import { SigninMessage } from "@/utils/SigninMessage"
 import { client } from "@/libs/api"
-
-type GithubUser = {
-  id: string
-  name: string
-  email: string
-  image: string
-}
 
 const providers = [
   CredentialsProvider({
@@ -69,31 +62,37 @@ export const authOptions: AuthOptions = {
   },
   secret: NEXTAUTH_SECRET,
   callbacks: {
-    session: async ({ session, token }) => {
+    session: async ({ session, token, user }) => {
       session.user = token.user
       return session
     },
     async jwt({ token, user }) {
       if (user) {
-        if (user.id) {
-          token.user = {
-            user: {
-              id: user.id,
-              email: user.email ?? "",
-              avatar: user.image ?? "",
-              createdAt: "",
-              updatedAt: "",
-            },
-            token: {
-              accessToken: "",
-              expiresIn: 10000,
-            },
-          }
+        // @ts-ignore
+        if (user.me) {
+          // @ts-ignore
+          token.user = user.me
         } else {
           token.user = user
         }
       }
       return token
+    },
+    async signIn({ user, profile, account }) {
+      if (account?.provider === "github") {
+        const githubUser = profile as GithubProfile
+        // @ts-ignore
+        user.me = await client.socialLogin({
+          firstName: githubUser?.name ?? "",
+          lastName: githubUser?.name ?? "",
+          email: githubUser.email ?? "",
+          avatar: githubUser.avatar_url,
+          password: Date.now().toString(),
+          socialId: account.providerAccountId,
+          provider: account.provider,
+        })
+      }
+      return true
     },
     async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
       if (process.env.NODE_ENV !== "production") {
@@ -111,17 +110,17 @@ export const authOptions: AuthOptions = {
       return baseUrl
     },
   },
-  debug: true,
+  debug: process.env.NODE_ENV === 'development',
   useSecureCookies: false,
-  logger: {
-    error(code, metadata) {
-      console.log({ type: "inside error logger", code, metadata })
-    },
-    warn(code) {
-      console.log({ type: "inside warn logger", code })
-    },
-    debug(code, metadata) {
-      console.log({ type: "inside debug logger", code, metadata })
-    },
-  },
+  // logger: {
+  //   error(code, metadata) {
+  //     console.log({ type: "inside error logger", code, metadata })
+  //   },
+  //   warn(code) {
+  //     console.log({ type: "inside warn logger", code })
+  //   },
+  //   debug(code, metadata) {
+  //     console.log({ type: "inside debug logger", code, metadata })
+  //   },
+  // },
 }

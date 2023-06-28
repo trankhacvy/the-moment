@@ -27,6 +27,7 @@ export interface UserDto {
   avatar?: string
   phone?: string
   isActive?: boolean
+  wallet?: string
 }
 
 export interface TokenPayloadDto {
@@ -39,6 +40,25 @@ export interface LoginPayloadDto {
   token: TokenPayloadDto
 }
 
+export interface WalletLoginDto {
+  wallet: string
+}
+
+export type SocialProviderTypes = "github"
+
+export interface SocialUserRegisterDto {
+  firstName?: string
+  lastName?: string
+  email: string
+  /** @minLength 6 */
+  password: string
+  phone?: string
+  socialId: string
+  /** @minLength -1 */
+  avatar?: string
+  provider: SocialProviderTypes
+}
+
 export interface UserRegisterDto {
   firstName?: string
   lastName?: string
@@ -46,7 +66,6 @@ export interface UserRegisterDto {
   /** @minLength 6 */
   password: string
   phone?: string
-  user_wallet?: string
 }
 
 export interface PageMetaDto {
@@ -270,6 +289,10 @@ export interface SolanaPayClaimPostDto {
 
 export type AuthControllerUserLoginData = LoginPayloadDto
 
+export type AuthControllerWalletLoginData = LoginPayloadDto
+
+export type AuthControllerSocialRegisterData = LoginPayloadDto
+
 export type AuthControllerUserRegisterPayload = UserRegisterDto & {
   /** @format binary */
   avatar?: File
@@ -418,6 +441,8 @@ export type TreesControllerFindTreeData = TreeDto
 export type ClaimsControllerClaimByWalletData = ClaimDto
 
 export type ClaimsControllerClaimByEmailData = ClaimDto
+
+export type ClaimsControllerClaimByQrData = ClaimDto
 
 export type ClaimsControllerWithdrawNftData = ClaimDto
 

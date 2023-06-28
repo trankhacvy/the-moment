@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@bundlr-network/client": "^0.11.2",
+    "@candypay/checkout-sdk": "^0.1.56",
     "@hookform/resolvers": "^3.1.0",
     "@metaplex-foundation/js": "^0.18.3",
     "@metaplex-foundation/js-plugin-nft-storage": "^0.19.4",

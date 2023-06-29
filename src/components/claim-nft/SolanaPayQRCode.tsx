@@ -91,6 +91,13 @@ export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQ
     }
   }, [success, isOpen])
 
+  useEffect(() => {
+    if (!isOpen) {
+      setSuccess(false)
+      setProcessing(false)
+    }
+  }, [isOpen])
+
   return (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
@@ -145,7 +152,7 @@ export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQ
                 </AspectRatio>
               </div>
               {success ? (
-                <div className="mt-2 flex flex-col gap-2 text-center">
+                <div className="mt-2 flex flex-col gap-3 text-center">
                   <Typography as="h6" level="h5" className="font-bold">
                     Congrats 🎉🎉
                   </Typography>
@@ -168,14 +175,14 @@ export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQ
         </div>
         {!processing && (
           <AlertDialogFooter className="!justify-center">
-            <Typography>Scan this QR Code to receive your POAP</Typography>
+            <Typography className="text-center">Scan this QR Code to receive your NFT</Typography>
           </AlertDialogFooter>
         )}
         <AlertDialogCancel asChild>
           <IconButton
             size="sm"
             color="default"
-            className="absolute right-2 top-2 border-none text-gray-800 shadow-none hover:bg-gray-800/8 focus:ring-0"
+            className="absolute right-2 top-2 border-none text-gray-800 !shadow-none hover:bg-gray-800/8 focus:ring-0"
           >
             <XIcon />
             <span className="sr-only">Close</span>

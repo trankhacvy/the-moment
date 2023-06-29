@@ -30,7 +30,6 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
   const { data: session } = useSession()
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [signature, setSignature] = useState("")
   const { toast } = useToast()
 
   const claim = async () => {
@@ -43,7 +42,6 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
         email: session.user?.user.email,
         network: "devnet",
       })
-      setSignature(response.signature ?? "")
       setSuccess(true)
     } catch (error: any) {
       console.error(error)
@@ -75,24 +73,25 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
             </div>
             {!success && (
               <Typography className="text-center">
-                Click the button below to claim your NFT to your email <b>{session?.user?.user.email}</b>. You will be
-                able to withdraw the NFT to your wallet at a later time.
-                <br /> No fees or costs are required.
+                Claim your NFT to your email <b>{session?.user?.user.email}</b> by clicking the button below. You can
+                withdraw the NFT to your wallet later without any fees or costs.
               </Typography>
             )}
           </div>
           <AlertDialogFooter>
             {success ? (
-              <div className="flex w-full flex-col items-center justify-center">
-                <Typography as="h6" className="font-bold" level="h5">
+              <div className="flex w-full flex-col items-center justify-center gap-3">
+                <Typography as="h6" level="h5" className="font-bold">
                   Congrats 🎉🎉
                 </Typography>
-                <Button className="underline" as={Link} variant="link" href={`/claim/${nftDrop.suffix}/profile`}>
+                <Typography color="secondary">You've successfully claimed the NFT</Typography>
+                {/* // TODO update URL */}
+                <Link className="text-gray-900 underline" href={`/claim/${nftDrop.suffix}/profile`}>
                   View in your profile
-                </Button>
+                </Link>
               </div>
             ) : (
-              <Button loading={loading} onClick={claim} fullWidth>
+              <Button loading={loading} scheme="default" onClick={claim} fullWidth>
                 Claim
               </Button>
             )}
@@ -101,7 +100,7 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
             <IconButton
               size="sm"
               color="default"
-              className="absolute right-2 top-2 border-none text-gray-800 shadow-none hover:bg-gray-800/8 focus:ring-0"
+              className="absolute right-2 top-2 border-none text-gray-800 !shadow-none hover:bg-gray-800/8 focus:ring-0"
             >
               <XIcon />
               <span className="sr-only">Close</span>

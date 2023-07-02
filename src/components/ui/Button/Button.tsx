@@ -5,7 +5,7 @@ import { forwardRefWithAs } from "@/utils/render"
 
 export const buttonVariants = tv({
   base: [
-    "inline-flex items-center justify-center rounded-lg shadow-z1 text-sm font-semibold transition-colors",
+    "inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-colors",
     "focus:outline-none focus:ring-4",
     "disabled:pointer-events-none",
     "active:scale-95",
@@ -14,9 +14,10 @@ export const buttonVariants = tv({
     variant: {
       solid: [
         // "bg-primary-400 text-white", "hover:bg-primary-600", "focus:ring-primary-100", "disabled:bg-primary-200"
+        "shadow-z1",
       ],
       outline: [
-        "text-primary-400 border border-primary-400",
+        "text-primary-400 border border-primary-400 shadow-z1",
         "focus:ring-primary-100",
         "disabled:text-primary-300 disabled:border-primary-200",
       ],
@@ -77,7 +78,7 @@ export const buttonVariants = tv({
   ],
   defaultVariants: {
     variant: "solid",
-    scheme: "primary",
+    scheme: "default",
     size: "md",
   },
 })

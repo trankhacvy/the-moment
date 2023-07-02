@@ -5,12 +5,21 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import { getCsrfToken, signIn, useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import { Routes } from "@/config/routes"
+import { Button } from "@/components/ui/Button"
+import { Input } from "@/components/ui/Input"
+import { client } from "@/libs/api"
+import { useUserAuth } from "@/hooks/use-user-auth"
+import Link from "next/link"
 
 const HomePage = () => {
-  const { status } = useSession()
+  // const { status } = useSession()
   const { connected, publicKey, signMessage } = useWallet()
   const { setVisible } = useWalletModal()
   const [openModal, setOpenModal] = useState(false)
+
+  const [email, setEmail] = useState("")
+
+  const { mutateUser } = useUserAuth("sign-in")
 
   const handleSignIn = async () => {
     try {
@@ -42,11 +51,28 @@ const HomePage = () => {
     }
   }
 
-  useEffect(() => {
-    if (connected && status === "unauthenticated" && openModal) {
-      handleSignIn()
+  const handleMagicLink = async () => {
+    try {
+      await client.loginByMagicLink(email)
+    } catch (error) {
+      console.error(error)
     }
-  }, [connected, status, openModal])
+  }
+
+  const handleLoginNormal = async () => {
+    try {
+      await client.login("vytk1@xx.com", "123456")
+      mutateUser()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  // useEffect(() => {
+  //   if (connected && status === "unauthenticated" && openModal) {
+  //     handleSignIn()
+  //   }
+  // }, [connected, status, openModal])
 
   return (
     <section className="min-h-screen bg-gray-900">
@@ -58,31 +84,37 @@ const HomePage = () => {
           <p className="mb-6 max-w-2xl font-light text-gray-400 md:text-lg lg:mb-8 lg:text-xl">
             Effortlessly create and distribute POAPs with cost-effective compressed NFT
           </p>
-          <button
-            onClick={() => {
-              if (!connected) {
-                setVisible(true)
-                setOpenModal(true)
-                return
-              }
-              handleSignIn()
-            }}
-            className="mr-3 inline-flex items-center justify-center rounded-lg bg-primary-500 px-5 py-3 text-center text-base font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
-          >
-            Get started
-            <svg
-              className="-mr-1 ml-2 h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
+          <Link href={Routes.LOGIN}>
+            <button
+              // onClick={() => {
+              //   if (!connected) {
+              //     setVisible(true)
+              //     setOpenModal(true)
+              //     return
+              //   }
+              //   handleSignIn()
+              // }}
+              className="mr-3 inline-flex items-center justify-center rounded-lg bg-primary-500 px-5 py-3 text-center text-base font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
             >
-              <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
+              Get started
+              <svg
+                className="-mr-1 ml-2 h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </Link>
+
+          {/* <Button onClick={handleMagicLink}>Login</Button>
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Button onClick={handleLoginNormal}>Login me in</Button> */}
         </div>
         <div className="hidden lg:col-span-5 lg:mt-0 lg:flex">
           <img className="" src="/assets/nft-logo.png" alt="hero" />

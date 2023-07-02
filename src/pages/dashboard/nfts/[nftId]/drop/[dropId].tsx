@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
-import type { ReactElement } from "react"
+import { useEffect, type ReactElement, useState } from "react"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
 import { NFTDetail, NFTDetailSkeleton } from "@/components/nft-detail/nft-detail-view"
@@ -8,12 +8,16 @@ import { useNFT } from "@/hooks/useNFT"
 import { Button } from "@/components/ui/Button"
 import { ChevronLeftIcon } from "lucide-react"
 import { DashboardLayout } from "@/layouts/dashboard-layout"
+import { useDrop } from "@/hooks/use-drop"
+import { DropDetailView } from "@/components/drop-detail/drop-detail-view"
 
-const NFTDetailPage: NextPageWithLayout = () => {
+const DropDetailPage: NextPageWithLayout = () => {
   const { query } = useRouter()
-  const nftId = query.nftId as string
+  const dropId = query.dropId as string
 
-  const { nft, isLoading } = useNFT(nftId)
+  const { drop } = useDrop(dropId, {
+    refreshInterval: (drop) => (drop?.status === "ACTIVE" ? 0 : 1000),
+  })
 
   return (
     <>
@@ -22,14 +26,13 @@ const NFTDetailPage: NextPageWithLayout = () => {
           Back
         </Button>
       </div>
-
-      {isLoading ? <NFTDetailSkeleton /> : <NFTDetail nft={nft} />}
+      <DropDetailView drop={drop} />
     </>
   )
 }
 
-NFTDetailPage.getLayout = function getLayout(page: ReactElement) {
+DropDetailPage.getLayout = function getLayout(page: ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>
 }
 
-export default NFTDetailPage
+export default DropDetailPage

@@ -12,59 +12,62 @@ import Image from "next/image"
 import { ReactElement, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { APP_BASE_URL } from "@/config/env"
-import { signIn, useSession } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { EmailClaimModal } from "@/components/claim-nft/EmailClaimModal"
 import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/Button"
-import { SiteHeader } from "@/components/sites/SiteHeader"
+// import { SiteHeader } from "@/components/sites/SiteHeader"
 import { useWalletLogin } from "@/utils/authOptions"
 import { SiteLayout } from "@/components/sites/SiteLayout"
+// import { useUserAuth } from "@/hooks/use-user-auth"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useUserAuth } from "@/hooks/use-user-auth"
 
 const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { data: session, status } = useSession()
   const nft = nftDrop.nft as NftDto
   const [isOpenQr, setIsOpenQr] = useState(false)
   const [isClaimWalletOpen, setIsClaimWalletOpen] = useState(false)
   const [isClaimEmailOpen, setIsClaimEmailOpen] = useState(false)
   const { asPath, query, replace, pathname } = useRouter()
+  const { connected } = useWallet()
+
+  const { isLoggedIn, user } = useUserAuth(null)
 
   const claimParam = query.claim
 
-  const loginWithWallet = useWalletLogin(`${asPath}?claim=wallet`)
+  const loginWithWallet = useWalletLogin(true)
 
   useEffect(() => {
-    if (status !== "authenticated") return
+    if (!isLoggedIn) return
 
     setTimeout(() => {
       if (claimParam === "wallet") {
         setIsClaimWalletOpen(true)
       }
 
-      if (claimParam === "email") {
-        setIsClaimEmailOpen(true)
-      }
+      // if (claimParam === "email") {
+      //   setIsClaimEmailOpen(true)
+      // }
     }, 150)
-  }, [claimParam, status])
+  }, [claimParam, isLoggedIn])
 
-  useEffect(() => {
-    if ((!isClaimWalletOpen && query?.claim === "wallet") || (!isClaimEmailOpen && query?.claim === "email")) {
-      replace(
-        {
-          pathname,
-          query: {
-            slug: query.slug,
-          },
-        },
-        undefined,
-        { shallow: true }
-      )
-    }
-  }, [isClaimWalletOpen, isClaimEmailOpen, query])
+  // useEffect(() => {
+  //   if ((!isClaimWalletOpen && query?.claim === "wallet") || (!isClaimEmailOpen && query?.claim === "email")) {
+  //     replace(
+  //       {
+  //         pathname,
+  //         query: {
+  //           slug: query.slug,
+  //         },
+  //       },
+  //       undefined,
+  //       { shallow: true }
+  //     )
+  //   }
+  // }, [isClaimWalletOpen, isClaimEmailOpen, query])
 
   return (
-    <div
-    // className="relative flex min-h-screen w-full flex-col"
-    >
+    <div>
       <NextSeo
         title={`Claim ${nft.name} NFT | ${siteConfig.name}`}
         description={`${siteConfig.name} - The easiest way to claim your POAP on Solana.`}
@@ -78,11 +81,9 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
         }}
       />
 
-      <SiteHeader />
-
       <div className="mx-auto w-full max-w-screen-xl grow px-4 pt-16 md:px-6 md:pt-20">
         <div className="-mx-4 flex flex-wrap md:-mx-8">
-          <div className="w-full grow-0 p-4 md:w-1/2 md:p-8">
+          <div className="w-full grow-0 p-4 md:w-5/12 md:p-8">
             <AspectRatio className="overflow-hidden rounded-xl">
               <Image alt={nft.name} src={nft.image} fill />
             </AspectRatio>
@@ -116,7 +117,7 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
                     trigger={
                       <Button
                         onClick={(event) => {
-                          if (!session) {
+                          if (!"session") {
                             event.preventDefault()
                             loginWithWallet()
                             return
@@ -144,7 +145,7 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
                     trigger={
                       <Button
                         onClick={(event) => {
-                          if (!session) {
+                          if (!"session") {
                             event.preventDefault()
                             signIn("github", {
                               callbackUrl: `${asPath}?claim=email`,
@@ -164,16 +165,12 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
               />
             </div>
           </div>
-          <div className="w-full grow-0 p-4 md:w-1/2 md:p-8 lg:w-5/12">
+          <div className="w-full grow-0 p-4 md:w-7/12 md:p-8 lg:w-5/12">
             <div className="flex h-full flex-col justify-center">
               <h1 className="line-clamp-2 text-4xl font-extrabold sm:text-5xl lg:text-6xl">{nft.name}</h1>
-              <Typography className="mt-4">
-                {nft.description} Occaecati est et illo quibusdam accusamus qui. Incidunt aut et molestiae ut facere
-                aut. Est quidem iusto praesentium excepturi harum nihil tenetur facilis. Ut omnis voluptates nihil
-                accusantium doloribus eaque debitis.
-              </Typography>
+              <Typography className="mt-4">{nft.description}</Typography>
 
-              <div className="mx-auto mt-10 hidden items-center gap-5 md:flex">
+              <div className="mt-10 hidden items-center gap-5 md:flex">
                 <SolanaQRCode
                   isOpen={isOpenQr}
                   onOpenChange={setIsOpenQr}
@@ -205,7 +202,7 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
                       trigger={
                         <Button
                           onClick={(event) => {
-                            if (!session) {
+                            if (!connected || !isLoggedIn) {
                               event.preventDefault()
                               loginWithWallet()
                               return
@@ -233,7 +230,7 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
                       trigger={
                         <Button
                           onClick={(event) => {
-                            if (!session) {
+                            if (!"session") {
                               event.preventDefault()
                               signIn("github", {
                                 callbackUrl: `${asPath}?claim=email`,
@@ -366,7 +363,7 @@ export const getStaticProps: GetStaticProps<{
   }
 
   try {
-    const nftDrop = await client.getDropBySuffix(params.slug as string)
+    const nftDrop = await client.getDropBySlug(params.slug as string)
 
     if (!nftDrop || !nftDrop.nft) {
       return {

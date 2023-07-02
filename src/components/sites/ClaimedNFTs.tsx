@@ -4,8 +4,8 @@ import { NFTCardSkeleton } from "./NFTCard"
 import { Typography } from "../ui/Typography"
 
 export const ClaimedNFTs = () => {
-  const { data: session } = useSession()
-  const { claims = [], isLoading } = useGetClaimsByEmail(session?.user?.user.email as string | undefined)
+  // const { data: session } = useSession()
+  const { claims = [], isLoading } = useGetClaimsByEmail('session?.user?.user.email' as string | undefined)
 
   if (isLoading) {
     return (

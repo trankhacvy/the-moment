@@ -12,11 +12,3 @@ export function useNFT(id?: string) {
     ...rest,
   }
 }
-
-export function useProtectedSWR(key: Key, fetcher: Fetcher) {
-  const { data : session }  = useSession()
-
-  return useSWR(
-    key,
-  )
-}

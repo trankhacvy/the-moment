@@ -1,11 +1,11 @@
 import type { ReactElement } from "react"
-import { AdminLayout } from "@/components/AdminLayout"
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
 import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
 import Link from "next/link"
+import { DashboardLayout } from "@/layouts/dashboard-layout"
 
 const SettingsPage: NextPageWithLayout = () => {
   return (
@@ -46,7 +46,7 @@ const SettingsPage: NextPageWithLayout = () => {
 }
 
 SettingsPage.getLayout = function getLayout(page: ReactElement) {
-  return <AdminLayout>{page}</AdminLayout>
+  return <DashboardLayout>{page}</DashboardLayout>
 }
 
 export default SettingsPage

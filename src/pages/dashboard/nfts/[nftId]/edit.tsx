@@ -8,6 +8,7 @@ import { NewNFTForm } from "@/components/new-nft/NewNFTForm"
 import { useRouter } from "next/router"
 import { useNFT } from "@/hooks/useNFT"
 import { Skeleton } from "@/components/ui/Skeleton"
+import { DashboardLayout } from "@/layouts/dashboard-layout"
 
 const EditNFTPage: NextPageWithLayout = () => {
   const { query } = useRouter()
@@ -42,7 +43,7 @@ const EditNFTPage: NextPageWithLayout = () => {
 }
 
 EditNFTPage.getLayout = function getLayout(page: ReactElement) {
-  return <AdminLayout>{page}</AdminLayout>
+  return <DashboardLayout>{page}</DashboardLayout>
 }
 
 export default EditNFTPage

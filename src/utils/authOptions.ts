@@ -9,6 +9,8 @@ import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import { useCallback, useEffect, useState } from "react"
 import { getCsrfToken, signIn } from "next-auth/react"
+import { useUserAuth } from "@/hooks/use-user-auth"
+import { useRouter } from "next/router"
 
 const providers = [
   CredentialsProvider({
@@ -134,36 +136,23 @@ export const authOptions: AuthOptions = {
   // },
 }
 
-export function useWalletLogin(callbackUrl?: string) {
-  const { connected, publicKey, signMessage } = useWallet()
+export function useWalletLogin(redirect?: boolean) {
+  const { asPath, query, pathname, replace } = useRouter()
+  const { mutateUser } = useUserAuth(null)
+  const { connected, publicKey } = useWallet()
   const { setVisible } = useWalletModal()
   const [openModal, setOpenModal] = useState(false)
 
   const login = useCallback(async () => {
     try {
-      if (!connected) {
+      if (!connected || !publicKey) {
         setOpenModal(true)
         setVisible(true)
+        return
       }
-      const csrf = await getCsrfToken()
-      if (!publicKey || !csrf || !signMessage) return
-
-      const message = new SigninMessage({
-        domain: window.location.host,
-        publicKey: publicKey?.toBase58(),
-        statement: `Sign this message to sign in to the app.`,
-        nonce: csrf,
-      })
-
-      const data = new TextEncoder().encode(message.prepare())
-      const signature = await signMessage(data)
-      const serializedSignature = bs58.encode(signature)
-
-      await signIn("credentials", {
-        message: JSON.stringify(message),
-        signature: serializedSignature,
-        callbackUrl,
-      })
+      await client.walletLogin(publicKey?.toBase58() ?? "")
+      await mutateUser()
+      replace(redirect ? `${asPath}?claim=wallet` : asPath, undefined, { shallow: true })
     } catch (error) {
       console.error(error)
     }

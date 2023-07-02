@@ -6,7 +6,6 @@ import { ClaimDto, DropDto, NftDto } from "@/types/apis"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { HomeIcon } from "lucide-react"
 import Image from "next/image"
-import { useSession } from "next-auth/react"
 import { useGetClaimsByEmail } from "@/hooks/useGetClaimsByEmail"
 import { NFTItemSkeleton } from "@/components/dashboard/NFTItem"
 import Link from "next/link"
@@ -18,8 +17,7 @@ import { SiteLayout } from "@/components/sites/SiteLayout"
 import { ProfileTabs } from "@/components/sites/ProfileTabs"
 
 const ProfilePage = () => {
-  const { data: session } = useSession()
-  const { claims = [], isLoading, mutate } = useGetClaimsByEmail(session?.user?.user.email as string | undefined)
+  const { claims = [], isLoading, mutate } = useGetClaimsByEmail('session?.user?.user.email' as string | undefined)
   const { query } = useRouter()
 
   return (

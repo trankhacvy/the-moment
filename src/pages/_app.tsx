@@ -47,13 +47,6 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-const AppWrapper = ({ children }: PropsWithChildren) => {
-  const { data: session } = useSession()
-  client.setAuthToken(session?.user?.token?.accessToken ?? "")
-
-  return <>{children}</>
-}
-
 const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page)
 
@@ -61,12 +54,14 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
     <>
       <SEORender />
       <SolanaProvider>
-        <SessionProvider session={pageProps.session}>
-          <TooltipProvider delayDuration={100}>
-            <AppWrapper>{getLayout(<Component {...pageProps} />)}</AppWrapper>
-          </TooltipProvider>
-          <Toaster />
-        </SessionProvider>
+        {/* <SessionProvider session={pageProps.session}> */}
+        <TooltipProvider delayDuration={100}>
+          {/* <AppWrapper> */}
+          {getLayout(<Component {...pageProps} />)}
+          {/* </AppWrapper> */}
+        </TooltipProvider>
+        <Toaster />
+        {/* </SessionProvider> */}
       </SolanaProvider>
     </>
   )

@@ -2,29 +2,39 @@ import { Typography } from "../ui/Typography"
 import { DropDto } from "@/types/apis"
 import dayjs from "dayjs"
 import { APP_BASE_URL } from "@/config/env"
-import { useClaims } from "@/hooks/useClaims"
 import { Separator } from "../ui/Separator"
-import { truncate } from "@/utils/truncate"
+import { Badge } from "../ui/badge"
 
-type DropItemProps = {
-  nftDrop: DropDto
+type DropDetailViewProps = {
+  drop?: DropDto
 }
 
-export const DropItem = ({ nftDrop }: DropItemProps) => {
-  const { claims } = useClaims(nftDrop.id)
+export const DropDetailView = ({ drop }: DropDetailViewProps) => {
+  const method = drop?.methods?.[0]
+
+  if (!method) return null
+
+  const dropStatus = () => {
+    if (drop.status === "WAITING_FOR_PAYMENT") return <Badge variant="default">Waiting for payment</Badge>
+    if (drop.status === "ACTIVE") return <Badge variant="success">Active</Badge>
+    return null
+  }
 
   return (
     <div className="rounded-2xl bg-white p-6 shadow-card">
-      <Typography as="h6" level="body2" className="font-bold">
-        Drop information
-      </Typography>
+      <div className="flex items-center justify-between">
+        <Typography as="h6" level="body2" className="font-bold">
+          Drop information
+        </Typography>
+        {dropStatus()}
+      </div>
       <div className="mt-6 flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <Typography color="secondary" level="body4">
             Number of NFTs
           </Typography>
           <Typography className="font-bold" level="body4">
-            {nftDrop.amount}
+            {drop.amount}
           </Typography>
         </div>
         <div className="flex items-center justify-between">
@@ -32,16 +42,16 @@ export const DropItem = ({ nftDrop }: DropItemProps) => {
             Method
           </Typography>
           <Typography className="font-bold" level="body4">
-            {nftDrop.method}
+            {drop.method}
           </Typography>
         </div>
         <div className="flex items-center justify-between">
           <Typography color="secondary" level="body4">
             Mint website
           </Typography>
-          <a href={`${APP_BASE_URL}/claim/${nftDrop.suffix}`} target="_blank" rel="noreferer">
+          <a href={`${APP_BASE_URL}/claim/${method.slug}`} target="_blank" rel="noreferer">
             <Typography className="font-bold underline" level="body4">
-              {`/claim/${nftDrop.suffix}`}
+              {`/claim/${method.slug}`}
             </Typography>
           </a>
         </div>
@@ -50,7 +60,7 @@ export const DropItem = ({ nftDrop }: DropItemProps) => {
             Start at
           </Typography>
           <Typography className="font-bold" level="body4">
-            {nftDrop.startAt ? dayjs(nftDrop.startAt).format("DD/MM/YYYY hh:mm") : "-"}
+            {method.startAt ? dayjs(method.startAt).format("DD/MM/YYYY hh:mm") : "-"}
           </Typography>
         </div>
         <div className="flex items-center justify-between">
@@ -58,12 +68,13 @@ export const DropItem = ({ nftDrop }: DropItemProps) => {
             End at
           </Typography>
           <Typography className="font-bold" level="body4">
-            {nftDrop.endAt ? dayjs(nftDrop.endAt).format("DD/MM/YYYY hh:mm") : "-"}
+            {method.endAt ? dayjs(method.endAt).format("DD/MM/YYYY hh:mm") : "-"}
           </Typography>
         </div>
       </div>
+
       <Separator className="my-6" />
-      <table className="w-full table-fixed border-collapse">
+      {/* <table className="w-full table-fixed border-collapse">
         <thead>
           <tr>
             <th className="border-b px-4 pb-4 text-left font-medium text-gray-500">Owner</th>
@@ -89,7 +100,7 @@ export const DropItem = ({ nftDrop }: DropItemProps) => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
     </div>
   )
 }

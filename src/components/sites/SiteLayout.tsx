@@ -4,7 +4,7 @@ import { SiteHeader } from "./SiteHeader"
 export const SiteLayout = ({ children }: PropsWithChildren) => {
   return (
     <div className="relative flex min-h-screen w-full flex-col">
-      <SiteHeader />
+      <SiteHeader showLogin />
       {children}
     </div>
   )

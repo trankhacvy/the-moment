@@ -22,8 +22,7 @@ import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/Button"
 
 const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { data: session } = useSession()
-  console.log("session", session)
+  // const { data: session } = useSession()
   const nft = nftDrop.nft as NftDto
   const { setVisible } = useWalletModal()
   const { connected, publicKey } = useWallet()
@@ -140,7 +139,7 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
                       trigger={
                         <IconButton
                           onClick={(event) => {
-                            if (!session) {
+                            if (!'session') {
                               event.preventDefault()
                               signIn("github")
                               return

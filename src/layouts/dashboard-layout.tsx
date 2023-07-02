@@ -1,14 +1,14 @@
 import { PropsWithChildren } from "react"
-import { AdminHeader } from "./AdminHeader"
-import { AdminNav } from "./AdminNav"
-import { signOut, useSession } from "next-auth/react"
-import { Routes } from "@/config/routes"
+import { DashboardHeader } from "./dashboard-header"
+import { DashboardNav } from "./dashboard-nav"
+import { useCurrentUser } from "@/hooks/useCurrentUser"
+import { useRouter } from "next/router"
 
-export const AdminLayout = ({ children }: PropsWithChildren) => {
-  // const { status, data } = useSession()
-  const status = "loading"
+export const DashboardLayout = ({ children }: PropsWithChildren) => {
+  const { asPath, push } = useRouter()
+  const { error, isLoading } = useCurrentUser()
 
-  if (status === "loading") {
+  if (isLoading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         <div className="w-40">
@@ -52,18 +52,18 @@ export const AdminLayout = ({ children }: PropsWithChildren) => {
     )
   }
 
-  if (status === "unauthenticated") {
-    signOut({
-      callbackUrl: Routes.INDEX,
-    })
+  if (error) {
+    const redirectTo = asPath
+
+    push(`/?next=${redirectTo}`)
     return null
   }
 
   return (
     <>
-      <AdminHeader />
+      <DashboardHeader />
       <div className="flex min-h-full w-full">
-        <AdminNav />
+        <DashboardNav />
         <main className="w-full py-[72px] lg:w-[calc(100vw-160px)] lg:grow lg:px-4 lg:py-[100px]">
           <div className="w-full px-4 md:px-6 2xl:mx-auto 2xl:max-w-screen-2xl">{children}</div>
         </main>

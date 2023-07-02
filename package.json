@@ -22,7 +22,7 @@
     "preinstall": "npx only-allow yarn",
     "coupling-graph": "npx madge --extensions js,jsx,ts,tsx,css,md,mdx ./ --exclude '.next|tailwind.config.js|reset.d.ts|prettier.config.js|postcss.config.js|playwright.config.ts|next.config.js|next-env.d.ts|instrumentation.ts|e2e/|README.md|.storybook/|.eslintrc.js' --image graph.svg",
     "supabase:types": "supabase gen types typescript --project-id gsohmicqdlihspbntfet > src/types/supabase.types.ts",
-    "gen-schema": "npx swagger-typescript-api -p http://localhost:8080/documentation-json -o ./src/types -n apis.ts --no-client --union-enums --extract-request-params --extract-request-body --extract-response-body"
+    "gen-schema": "npx swagger-typescript-api -p http://localhost:8080/documentation-json -o ./src/types -n apis.ts --no-client --union-enums --extract-request-params --extract-request-body --extract-response-body --another-array-type"
   },
   "dependencies": {
     "@bundlr-network/client": "^0.11.2",
@@ -67,6 +67,7 @@
     "framer-motion": "^10.12.16",
     "iron-session": "^6.3.1",
     "isomorphic-unfetch": "^4.0.2",
+    "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "lucide-react": "^0.221.0",
     "next": "^13.3.0",
@@ -106,6 +107,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@total-typescript/ts-reset": "^0.4.2",
+    "@types/js-cookie": "^3.0.3",
     "@types/node": "^18.0.0",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",

@@ -58,6 +58,7 @@
     "@solana/wallet-adapter-wallets": "^0.19.16",
     "@solana/web3.js": "^1.77.1",
     "@supabase/supabase-js": "^2.23.0",
+    "@vercel/analytics": "^1.0.1",
     "@vercel/otel": "^0.3.0",
     "@web3auth/sign-in-with-solana": "^2.0.0",
     "axios": "^1.4.0",

@@ -1,6 +1,7 @@
 import "../styles/global.css"
 require("@solana/wallet-adapter-react-ui/styles.css")
 import { DefaultSeo } from "next-seo"
+import { Analytics } from "@vercel/analytics/react"
 import "isomorphic-unfetch"
 import type { AppProps } from "next/app"
 import { ReactElement } from "react"
@@ -52,6 +53,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
       <SolanaProvider>
         <TooltipProvider delayDuration={100}>{getLayout(<Component {...pageProps} />)}</TooltipProvider>
         <Toaster />
+        <Analytics />
       </SolanaProvider>
     </>
   )

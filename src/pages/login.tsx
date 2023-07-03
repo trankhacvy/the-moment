@@ -13,6 +13,7 @@ import { client } from "@/libs/api"
 import { MailCheck } from "lucide-react"
 import { Routes } from "@/config/routes"
 import { SiteHeader } from "@/components/sites/SiteHeader"
+import { APP_BASE_URL } from "@/config/env"
 
 const formSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }).email("Email must be a valid email address"),
@@ -32,7 +33,7 @@ const LoginPage = () => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await client.loginByMagicLink(values.email)
+      await client.loginByMagicLink(values.email, `${APP_BASE_URL}/welcome`)
       setCodeSent(true)
     } catch (error) {
       console.error(error)

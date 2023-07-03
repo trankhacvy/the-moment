@@ -107,11 +107,15 @@ class Client {
     })
   }
 
-  public loginByMagicLink(email: string) {
+  public loginByMagicLink(email: string, callback?: string, redirect?: string) {
     return fetcher(`${this.baseUrl}/auth/login/magic`, {
       headers: this.headers,
       method: "POST",
-      body: JSON.stringify({ destination: email, callbackUrl: `${APP_BASE_URL}/welcome` }),
+      body: JSON.stringify({
+        destination: email,
+        callbackUrl: callback ?? `${APP_BASE_URL}/welcome`,
+        redirectUrl: redirect ?? "",
+      }),
     })
   }
 

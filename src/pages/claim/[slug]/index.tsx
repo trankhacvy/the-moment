@@ -16,22 +16,22 @@ import { signIn } from "next-auth/react"
 import { EmailClaimModal } from "@/components/claim-nft/EmailClaimModal"
 import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/Button"
-// import { SiteHeader } from "@/components/sites/SiteHeader"
 import { useWalletLogin } from "@/utils/authOptions"
 import { SiteLayout } from "@/components/sites/SiteLayout"
-// import { useUserAuth } from "@/hooks/use-user-auth"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useUserAuth } from "@/hooks/use-user-auth"
+import { EmailLoginModal } from "@/components/sites/EmailLoginModal"
 
 const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const nft = nftDrop.nft as NftDto
   const [isOpenQr, setIsOpenQr] = useState(false)
   const [isClaimWalletOpen, setIsClaimWalletOpen] = useState(false)
   const [isClaimEmailOpen, setIsClaimEmailOpen] = useState(false)
-  const { asPath, query, replace, pathname } = useRouter()
+  const [isEmailLoginOpen, setIsEmailLoginOpen] = useState(false)
+  const { asPath, query, pathname } = useRouter()
   const { connected } = useWallet()
 
-  const { isLoggedIn, user } = useUserAuth(null)
+  const { isLoggedIn } = useUserAuth(null)
 
   const claimParam = query.claim
 
@@ -45,26 +45,11 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
         setIsClaimWalletOpen(true)
       }
 
-      // if (claimParam === "email") {
-      //   setIsClaimEmailOpen(true)
-      // }
+      if (claimParam === "email") {
+        setIsClaimEmailOpen(true)
+      }
     }, 150)
   }, [claimParam, isLoggedIn])
-
-  // useEffect(() => {
-  //   if ((!isClaimWalletOpen && query?.claim === "wallet") || (!isClaimEmailOpen && query?.claim === "email")) {
-  //     replace(
-  //       {
-  //         pathname,
-  //         query: {
-  //           slug: query.slug,
-  //         },
-  //       },
-  //       undefined,
-  //       { shallow: true }
-  //     )
-  //   }
-  // }, [isClaimWalletOpen, isClaimEmailOpen, query])
 
   return (
     <div>
@@ -184,7 +169,6 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
                           startDecorator={
                             <Image width={27} height={24} alt="solana pay" src="/assets/solana-icon.png" />
                           }
-                          scheme="default"
                         >
                           Pay
                         </Button>
@@ -197,57 +181,50 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
                   isOpen={isClaimWalletOpen}
                   onOpenChange={setIsClaimWalletOpen}
                   trigger={
-                    <ActionButton
-                      description="Claim by wallet"
-                      trigger={
-                        <Button
-                          onClick={(event) => {
-                            if (!connected || !isLoggedIn) {
-                              event.preventDefault()
-                              loginWithWallet()
-                              return
-                            }
-                            setIsClaimWalletOpen(true)
-                          }}
-                          scheme="default"
-                          startDecorator={<WalletIcon />}
-                        >
-                          Use Wallet
-                        </Button>
-                      }
-                    />
+                    <Button
+                      onClick={(event) => {
+                        if (!connected || !isLoggedIn) {
+                          event.preventDefault()
+                          loginWithWallet()
+                          return
+                        }
+                        setIsClaimWalletOpen(true)
+                      }}
+                      startDecorator={<WalletIcon />}
+                    >
+                      Use Wallet
+                    </Button>
                   }
                   nftDrop={nftDrop}
                 />
 
-                <EmailClaimModal
-                  isOpen={isClaimEmailOpen}
-                  onOpenChange={setIsClaimEmailOpen}
-                  nftDrop={nftDrop}
-                  trigger={
-                    <ActionButton
-                      description="Claim by email"
-                      trigger={
-                        <Button
-                          onClick={(event) => {
-                            if (!"session") {
-                              event.preventDefault()
-                              signIn("github", {
-                                callbackUrl: `${asPath}?claim=email`,
-                              })
-                              return
-                            }
-                            setIsClaimEmailOpen(true)
-                          }}
-                          scheme="default"
-                          startDecorator={<MailIcon />}
-                        >
-                          Use Email
-                        </Button>
-                      }
-                    />
-                  }
-                />
+                {isLoggedIn ? (
+                  <EmailClaimModal
+                    isOpen={isClaimEmailOpen}
+                    onOpenChange={setIsClaimEmailOpen}
+                    nftDrop={nftDrop}
+                    trigger={
+                      <Button
+                        onClick={() => {
+                          setIsClaimEmailOpen(true)
+                        }}
+                        startDecorator={<MailIcon />}
+                      >
+                        Use Email
+                      </Button>
+                    }
+                  />
+                ) : (
+                  <EmailLoginModal
+                    isOpen={isEmailLoginOpen}
+                    onOpenChange={setIsEmailLoginOpen}
+                    trigger={
+                      <Button scheme="default" startDecorator={<MailIcon />}>
+                        Use Email
+                      </Button>
+                    }
+                  />
+                )}
               </div>
 
               <div className="mt-10 flex gap-6">

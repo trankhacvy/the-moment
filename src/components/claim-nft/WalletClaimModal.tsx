@@ -27,6 +27,7 @@ type WalletClaimModalProps = {
 
 export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop }: WalletClaimModalProps) => {
   const nft = nftDrop.nft as NftDto
+  const dropMethod = nftDrop.methods?.[0]
 
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -42,6 +43,7 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
         dropId: nftDrop.id,
         claimant: publicKey.toBase58(),
         network: "devnet",
+        dropMethodId: dropMethod.id,
       })
       setSignature(response.signature ?? "")
       setSuccess(true)

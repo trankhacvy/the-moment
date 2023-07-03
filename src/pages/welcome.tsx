@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/sites/SiteHeader"
 import { Typography } from "@/components/ui/Typography"
+import { Routes } from "@/config/routes"
 import { useUserAuth } from "@/hooks/use-user-auth"
 import { client } from "@/libs/api"
 import type { NextPage } from "next"
@@ -9,11 +10,11 @@ import { useEffect, useState } from "react"
 type SignErrorType = "INVALID_LINK" | "SERVER_ERROR"
 
 const WelcomePage: NextPage = () => {
-  const { query, isReady, push } = useRouter()
+  const { query, isReady, replace } = useRouter()
   const { token, redirectUrl } = query
   const [isSigningIn, setIsSigningIn] = useState(false)
   const [errorSigningIn, setErrorSignIn] = useState<SignErrorType | undefined>()
-  const { mutateUser } = useUserAuth("sign-in")
+  const { mutateUser } = useUserAuth(null)
 
   useEffect(() => {
     console.log("query", query, isReady)
@@ -28,13 +29,15 @@ const WelcomePage: NextPage = () => {
       .magicLinkCallback(token as string)
       .then(() => {
         setIsSigningIn(false)
-        mutateUser()
+        mutateUser().then(() => {
+          replace((redirectUrl as string) ?? Routes.DASHBOARD)
+        })
       })
       .catch((error) => {
         setErrorSignIn("SERVER_ERROR")
         setIsSigningIn(false)
       })
-  }, [token, isReady, redirectUrl, mutateUser])
+  }, [token, isReady, redirectUrl, mutateUser, replace])
 
   return (
     <div className="bg-gradient-to-r from-[#C9FFBF] to-[#FFAFBD]">

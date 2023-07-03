@@ -42,7 +42,10 @@ export interface LoginPayloadDto {
 
 export interface MagicLinkLogin {
   destination: string
-  callbackUrl: string
+  /** @minLength -1 */
+  callbackUrl?: string
+  /** @minLength -1 */
+  redirectUrl?: string
 }
 
 export interface WalletLoginDto {
@@ -372,6 +375,8 @@ export interface ClaimDto {
   ownerId: string
   /** @format uuid */
   dropMethodId: string
+  /** @minLength -1 */
+  signature?: string
 }
 
 export interface CreateClaimByEmailDto {
@@ -535,9 +540,7 @@ export type NftDropsControllerCreateMintLinksDropData = CheckoutDropDto
 
 export type NftDropsControllerGetDropData = DropDto
 
-export type NftDropsControllerGetDropBySuffixData = DropDto
-
-export type NftDropsControllerCheckDropSubfixData = DropDto
+export type NftDropsControllerGetWebsiteDropBySlugData = DropDto
 
 export type CheckoutControllerCreateCheckoutData = CheckoutDto
 

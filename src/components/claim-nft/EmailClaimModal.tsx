@@ -15,8 +15,8 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useToast } from "../ui/Toast"
 import { client } from "@/libs/api"
-import { useSession } from "next-auth/react"
 import Link from "next/link"
+import { useUserAuth } from "@/hooks/use-user-auth"
 
 type EmailClaimModalProps = {
   trigger: React.ReactNode
@@ -27,21 +27,19 @@ type EmailClaimModalProps = {
 
 export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop }: EmailClaimModalProps) => {
   const nft = nftDrop.nft as NftDto
-  // const { data: session } = useSession()
+  const { user } = useUserAuth(null)
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
 
   const claim = async () => {
     try {
-      if (!'session?.user?.user.email') return
-
       setLoading(true)
-      const response = await client.claimNFTByEmail({
-        dropId: nftDrop.id,
-        email: 'session.user?.user.email',
-        network: "devnet",
-      })
+      // const response = await client.claimNFTByEmail({
+      //   dropId: nftDrop.id,
+      //   email: 'session.user?.user.email',
+      //   network: "devnet",
+      // })
       setSuccess(true)
     } catch (error: any) {
       console.error(error)
@@ -73,8 +71,8 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
             </div>
             {!success && (
               <Typography className="text-center">
-                Claim your NFT to your email <b>{'session?.user?.user.email'}</b> by clicking the button below. You can
-                withdraw the NFT to your wallet later without any fees or costs.
+                Claim your NFT to your email <b>{user?.email}</b> by clicking the button below. You can withdraw the NFT
+                to your wallet later without any fees or costs.
               </Typography>
             )}
           </div>

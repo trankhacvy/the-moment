@@ -3,20 +3,25 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover
 import { Typography } from "@/components/ui/Typography"
 import { Separator } from "@/components/ui/Separator"
 import { truncate } from "@/utils/truncate"
-import { Button } from "../ui/Button"
+import { Button, ButtonProps } from "../ui/Button"
 import { LogOutIcon, MailIcon, UserIcon, WalletIcon } from "lucide-react"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useWalletLogin } from "@/utils/authOptions"
 import { useRouter } from "next/router"
 import { cn } from "@/utils/cn"
 import Link from "next/link"
 import { useUserAuth } from "@/hooks/use-user-auth"
 import { client } from "@/libs/api"
+import { EmailLoginModal } from "./EmailLoginModal"
 
 export const LoginDropdown = () => {
   const { query } = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const [isEmailLoginOpen, setIsEmailLoginOpen] = useState(false)
   const { isLoggedIn, user, mutateUser } = useUserAuth(null)
+
+  const btnLoginRef = useRef<HTMLButtonElement>(null)
+  const dumpRef = useRef<HTMLButtonElement | null>(null)
 
   const loginWithWallet = useWalletLogin()
 
@@ -31,7 +36,9 @@ export const LoginDropdown = () => {
             </Avatar>
           </button>
         ) : (
-          <Button scheme="default">Login</Button>
+          <Button ref={btnLoginRef} scheme="default">
+            Login
+          </Button>
         )}
       </PopoverTrigger>
       {isLoggedIn ? (
@@ -69,7 +76,18 @@ export const LoginDropdown = () => {
           </li>
         </PopoverContent>
       ) : (
-        <PopoverContent align="end" className="w-40 p-0">
+        <PopoverContent
+          align="end"
+          className="w-40 p-0"
+          hidden={isEmailLoginOpen}
+          onCloseAutoFocus={() => {
+            if (dumpRef.current) {
+              dumpRef.current.focus()
+              dumpRef.current = null
+              event?.preventDefault()
+            }
+          }}
+        >
           <li
             onClick={() => {
               setIsOpen(false)
@@ -82,18 +100,28 @@ export const LoginDropdown = () => {
               Use Wallet
             </Typography>
           </li>
-          <li
-            onClick={() => {
-              setIsOpen(false)
-              // signIn("github")
+          <EmailLoginModal
+            isOpen={isEmailLoginOpen}
+            onOpenChange={(open) => {
+              setIsEmailLoginOpen(open)
+              if (open === false) {
+                setIsOpen(false)
+              }
             }}
-            className="m-2 flex cursor-pointer list-none items-center gap-2 rounded-md px-2 py-1.5 hover:bg-gray-500/8"
-          >
-            <MailIcon className="text-gray-600" />
-            <Typography as="span" level="body4">
-              Use Email
-            </Typography>
-          </li>
+            trigger={
+              <li
+                onClick={() => {
+                  dumpRef.current = btnLoginRef.current
+                }}
+                className="m-2 flex cursor-pointer list-none items-center gap-2 rounded-md px-2 py-1.5 hover:bg-gray-500/8"
+              >
+                <MailIcon className="text-gray-600" />
+                <Typography as="span" level="body4">
+                  Use Email
+                </Typography>
+              </li>
+            }
+          />
         </PopoverContent>
       )}
     </Popover>

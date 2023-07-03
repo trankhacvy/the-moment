@@ -17,7 +17,6 @@ import { MAX_FILE_SIZE } from "@/config/image"
 import { NftDto } from "@/types/apis"
 import { useEffect } from "react"
 import { Routes } from "@/config/routes"
-import { Alert, AlertTitle } from "../ui/Alert"
 
 const MAX_NAME_LENGTH = 32
 const MAX_SYMBOL_LENGTH = 10

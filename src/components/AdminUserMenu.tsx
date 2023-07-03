@@ -7,13 +7,13 @@ import { truncate } from "@/utils/truncate"
 import { Routes } from "@/config/routes"
 
 const AdminUserMenu = () => {
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
   return (
     <Popover>
       <PopoverTrigger asChild>
         <button>
           <Avatar>
-            <AvatarImage src={session?.user.user?.avatar ?? ""} alt={session?.user.user.firstName} />
+            <AvatarImage src={'session?.user.user?.avatar' ?? ""} alt={'session?.user.user.firstName'} />
             <AvatarFallback>😃</AvatarFallback>
           </Avatar>
         </button>

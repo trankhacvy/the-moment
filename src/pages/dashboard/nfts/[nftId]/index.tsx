@@ -1,13 +1,13 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
 import type { ReactElement } from "react"
-import { AdminLayout } from "@/components/AdminLayout"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
-import { NFTDetail, NFTDetailSkeleton } from "@/components/nft-detail/NFTDetail"
+import { NFTDetail, NFTDetailSkeleton } from "@/components/nft-detail/nft-detail-view"
 import { useNFT } from "@/hooks/useNFT"
 import { Button } from "@/components/ui/Button"
 import { ChevronLeftIcon } from "lucide-react"
+import { DashboardLayout } from "@/layouts/dashboard-layout"
 
 const NFTDetailPage: NextPageWithLayout = () => {
   const { query } = useRouter()
@@ -29,7 +29,7 @@ const NFTDetailPage: NextPageWithLayout = () => {
 }
 
 NFTDetailPage.getLayout = function getLayout(page: ReactElement) {
-  return <AdminLayout>{page}</AdminLayout>
+  return <DashboardLayout>{page}</DashboardLayout>
 }
 
 export default NFTDetailPage

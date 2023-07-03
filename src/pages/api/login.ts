@@ -20,7 +20,6 @@ async function loginRoute(req: ExtendedNextApiRequest, res: NextApiResponse) {
 
   try {
     const response = await client.login(email, password)
-    client.setAuthToken(response.token.accessToken)
     const user = response.user
     req.session.user = user
 

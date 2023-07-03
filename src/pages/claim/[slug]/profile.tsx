@@ -6,32 +6,39 @@ import { ClaimDto, DropDto, NftDto } from "@/types/apis"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { HomeIcon } from "lucide-react"
 import Image from "next/image"
-import { useSession } from "next-auth/react"
 import { useGetClaimsByEmail } from "@/hooks/useGetClaimsByEmail"
 import { NFTItemSkeleton } from "@/components/dashboard/NFTItem"
 import Link from "next/link"
 import { Button } from "@/components/ui/Button"
 import { WithdrawNFTModal } from "@/components/claim-nft/WithdrawNftModal"
 import { useRouter } from "next/router"
+import { ReactElement } from "react"
+import { SiteLayout } from "@/components/sites/SiteLayout"
+import { ProfileTabs } from "@/components/sites/ProfileTabs"
 
 const ProfilePage = () => {
-  const { data: session } = useSession()
-  const { claims = [], isLoading, mutate } = useGetClaimsByEmail(session?.user?.user.email as string | undefined)
+  const { claims = [], isLoading, mutate } = useGetClaimsByEmail('session?.user?.user.email' as string | undefined)
   const { query } = useRouter()
 
   return (
-    <div className="relative flex min-h-screen w-full items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-20">
-      <div className="!absolute !right-6 !top-6 flex items-center gap-4">
+    <>
+      {/* <div className="!absolute !right-6 !top-6 flex items-center gap-4">
         <ConnectWalletButton />
         <Link replace href={`/claim/${query.slug}`}>
           <IconButton className="bg-warning-500 text-white hover:bg-warning-700">
             <HomeIcon />
           </IconButton>
         </Link>
-      </div>
+      </div> */}
 
-      <div className="container mx-auto w-full px-4 md:px-6 ">
-        <div className="w-full rounded-2xl bg-white p-10 shadow-dropdown">
+      <div className="mx-auto w-full max-w-screen-xl grow px-4 pt-16 md:px-6 md:pt-20">
+        <div className="py-6 md:py-8 lg:py-10">
+          <Typography as="h4" level="body1" className="font-bold">
+            Your NFTs
+          </Typography>
+        </div>
+        <ProfileTabs />
+        {/* <div className="w-full rounded-2xl bg-white p-10 shadow-dropdown">
           <Typography as="h6" level="body2" className="font-bold">
             Your NFTs
           </Typography>
@@ -60,58 +67,14 @@ const ProfilePage = () => {
               </>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
-    </div>
-  )
-}
-
-type NFTItemProps = {
-  claim: ClaimDto
-  nft: NftDto
-  nftDrop: DropDto
-  onSuccess?: VoidFunction
-}
-
-export const NFTItem = ({ claim, nft, nftDrop, onSuccess }: NFTItemProps) => {
-  const { connected, publicKey } = useWallet()
-
-  return (
-    <div className="overflow-hidden rounded-2xl bg-white shadow-card">
-      <AspectRatio>
-        <Image src={nft.image} alt={nft.name} fill />
-      </AspectRatio>
-      <div className="p-5">
-        <Typography className="mb-2 font-semibold">{nft.name}</Typography>
-        <Typography color="secondary" level="body4" className="line-clamp-2 text-ellipsis">
-          {nft.description}
-        </Typography>
-        <div className="mt-4 flex justify-end">
-          {claim.owner ? (
-            <Button variant="outline" disabled>
-              Claimed
-            </Button>
-          ) : (
-            <>
-              {connected && publicKey ? (
-                <WithdrawNFTModal
-                  nftDrop={nftDrop}
-                  trigger={
-                    <Button className="" size="sm">
-                      Withdraw
-                    </Button>
-                  }
-                  onSuccess={onSuccess}
-                />
-              ) : (
-                <ConnectWalletButton />
-              )}
-            </>
-          )}
-        </div>
-      </div>
-    </div>
+    </>
   )
 }
 
 export default ProfilePage
+
+ProfilePage.getLayout = function getLayout(page: ReactElement) {
+  return <SiteLayout>{page}</SiteLayout>
+}

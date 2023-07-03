@@ -1,9 +1,16 @@
+import bs58 from "bs58"
 import GitHubProvider, { GithubProfile } from "next-auth/providers/github"
 import { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { NEXTAUTH_SECRET } from "@/config/env"
 import { SigninMessage } from "@/utils/SigninMessage"
 import { client } from "@/libs/api"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import { useCallback, useEffect, useState } from "react"
+import { getCsrfToken, signIn } from "next-auth/react"
+import { useUserAuth } from "@/hooks/use-user-auth"
+import { useRouter } from "next/router"
 
 const providers = [
   CredentialsProvider({
@@ -49,7 +56,6 @@ const providers = [
     },
   }),
   GitHubProvider({
-    id: "github",
     clientId: process.env.GITHUB_ID!,
     clientSecret: process.env.GITHUB_SECRET!,
   }),
@@ -62,7 +68,7 @@ export const authOptions: AuthOptions = {
   },
   secret: NEXTAUTH_SECRET,
   callbacks: {
-    session: async ({ session, token, user }) => {
+    session: async ({ session, token }) => {
       session.user = token.user
       return session
     },
@@ -81,16 +87,21 @@ export const authOptions: AuthOptions = {
     async signIn({ user, profile, account }) {
       if (account?.provider === "github") {
         const githubUser = profile as GithubProfile
-        // @ts-ignore
-        user.me = await client.socialLogin({
-          firstName: githubUser?.name ?? "",
-          lastName: githubUser?.name ?? "",
-          email: githubUser.email ?? "",
-          avatar: githubUser.avatar_url,
-          password: Date.now().toString(),
-          socialId: account.providerAccountId,
-          provider: account.provider,
-        })
+        try {
+          // @ts-ignore
+          user.me = await client.socialLogin({
+            firstName: githubUser?.name ?? "",
+            lastName: githubUser?.name ?? "",
+            email: githubUser.email ?? "",
+            avatar: githubUser.avatar_url,
+            password: Date.now().toString(),
+            socialId: account.providerAccountId,
+            provider: account.provider,
+          })
+        } catch (error) {
+          console.error(error)
+          return false
+        }
       }
       return true
     },
@@ -110,7 +121,7 @@ export const authOptions: AuthOptions = {
       return baseUrl
     },
   },
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === "development",
   useSecureCookies: false,
   // logger: {
   //   error(code, metadata) {
@@ -123,4 +134,35 @@ export const authOptions: AuthOptions = {
   //     console.log({ type: "inside debug logger", code, metadata })
   //   },
   // },
+}
+
+export function useWalletLogin(redirect?: boolean) {
+  const { asPath, query, pathname, replace } = useRouter()
+  const { mutateUser } = useUserAuth(null)
+  const { connected, publicKey } = useWallet()
+  const { setVisible } = useWalletModal()
+  const [openModal, setOpenModal] = useState(false)
+
+  const login = useCallback(async () => {
+    try {
+      if (!connected || !publicKey) {
+        setOpenModal(true)
+        setVisible(true)
+        return
+      }
+      await client.walletLogin(publicKey?.toBase58() ?? "")
+      await mutateUser()
+      replace(redirect ? `${asPath}?claim=wallet` : asPath, undefined, { shallow: true })
+    } catch (error) {
+      console.error(error)
+    }
+  }, [connected, publicKey])
+
+  useEffect(() => {
+    if (connected && openModal) {
+      login()
+    }
+  }, [openModal, connected])
+
+  return login
 }

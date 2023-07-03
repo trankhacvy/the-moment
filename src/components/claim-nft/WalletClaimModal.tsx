@@ -27,6 +27,7 @@ type WalletClaimModalProps = {
 
 export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop }: WalletClaimModalProps) => {
   const nft = nftDrop.nft as NftDto
+  const dropMethod = nftDrop.methods?.[0]
 
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -42,6 +43,7 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
         dropId: nftDrop.id,
         claimant: publicKey.toBase58(),
         network: "devnet",
+        dropMethodId: dropMethod.id,
       })
       setSignature(response.signature ?? "")
       setSuccess(true)
@@ -74,7 +76,7 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
               </AspectRatio>
             </div>
             {!success && (
-              <Typography className="text-center font-semibold">
+              <Typography className="text-center">
                 Click the below button to receive NFT.
                 <br /> No fees or costs are required.
               </Typography>
@@ -82,22 +84,22 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
           </div>
           <AlertDialogFooter>
             {success ? (
-              <div className="flex w-full flex-col items-center justify-center">
-                <Typography as="h6" className="font-bold" level="h5">
+              <div className="flex w-full flex-col items-center justify-center gap-3">
+                <Typography as="h6" level="h5" className="font-bold">
                   Congrats 🎉🎉
                 </Typography>
-                <Button
-                  variant="link"
-                  as="a"
-                  href={`https://translator.shyft.to/tx/${signature}?cluster=devnet`}
+                <Typography color="secondary">You've successfully claimed the NFT</Typography>
+                <a
+                  className="text-gray-900 underline"
                   target="_blank"
-                  className="underline"
+                  // TODO use function
+                  href={`https://translator.shyft.to/tx/${signature}?cluster=devnet`}
                 >
-                  View the transaction
-                </Button>
+                  View transaction
+                </a>
               </div>
             ) : (
-              <Button loading={loading} onClick={claim} fullWidth>
+              <Button loading={loading} onClick={claim} fullWidth scheme="default">
                 Claim
               </Button>
             )}
@@ -106,7 +108,7 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
             <IconButton
               size="sm"
               color="default"
-              className="absolute right-2 top-2 border-none text-gray-800 shadow-none hover:bg-gray-800/8 focus:ring-0"
+              className="absolute right-2 top-2 border-none text-gray-800 !shadow-none hover:bg-gray-800/8 focus:ring-0"
             >
               <XIcon />
               <span className="sr-only">Close</span>

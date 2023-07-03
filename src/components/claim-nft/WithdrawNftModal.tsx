@@ -27,7 +27,7 @@ type WithdrawNFTModalProps = {
 
 export const WithdrawNFTModal = ({ trigger, nftDrop, onSuccess }: WithdrawNFTModalProps) => {
   const nft = nftDrop.nft as NftDto
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
   const { publicKey } = useWallet()
 
   const [success, setSuccess] = useState(false)
@@ -40,7 +40,7 @@ export const WithdrawNFTModal = ({ trigger, nftDrop, onSuccess }: WithdrawNFTMod
       if (!publicKey) return
       setLoading(true)
       const response = await client.withdrawNFT({
-        email: session?.user?.user.email ?? "",
+        email: 'session?.user?.user.email' ?? "",
         claimant: publicKey.toBase58() ?? "",
         dropId: nftDrop.id,
         network: "devnet",

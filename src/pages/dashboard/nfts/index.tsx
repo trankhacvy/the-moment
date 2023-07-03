@@ -1,13 +1,13 @@
 import { PlusIcon } from "lucide-react"
 import Link from "next/link"
 import type { ReactElement } from "react"
-import { AdminLayout } from "@/components/AdminLayout"
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs"
 import { Button } from "@/components/ui/Button"
 import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
 import { NFTList } from "@/components/dashboard/NFTList"
+import { DashboardLayout } from "@/layouts/dashboard-layout"
 
 const EventsPage: NextPageWithLayout = () => {
   return (
@@ -36,7 +36,7 @@ const EventsPage: NextPageWithLayout = () => {
 }
 
 EventsPage.getLayout = function getLayout(page: ReactElement) {
-  return <AdminLayout>{page}</AdminLayout>
+  return <DashboardLayout>{page}</DashboardLayout>
 }
 
 export default EventsPage

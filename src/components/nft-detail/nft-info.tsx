@@ -1,72 +1,16 @@
 import React from "react"
 import { EditIcon, GlobeIcon, KeyIcon, LinkIcon, MoreVerticalIcon, ScrollIcon, TrashIcon } from "lucide-react"
 import { Typography } from "@/components/ui/Typography"
-import { AspectRatio } from "../ui/AspectRatio"
+import { AspectRatio } from "@/components/ui/AspectRatio"
 import Image from "next/image"
-import { Skeleton } from "../ui/Skeleton"
 import Link from "next/link"
 import { Routes } from "@/config/routes"
 import { NftDto } from "@/types/apis"
-import { IconButton } from "../ui/IconButton"
+import { IconButton } from "@/components/ui/IconButton"
 import { cn } from "@/utils/cn"
-import { Popover, PopoverTrigger, PopoverContent } from "../ui/Popover"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
-import { DropItem } from "./DropItem"
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/Popover"
 
-type Props = {
-  nft?: NftDto
-}
-
-export const NFTDetail = ({ nft }: Props) => {
-  const drops = nft?.drops ?? []
-
-  return drops.length > 0 ? <NFTTabs nft={nft} /> : <NFTInfo nft={nft} />
-}
-
-export const NFTDetailSkeleton = () => {
-  return (
-    <div className="flex gap-6">
-      <div className="basis-1/2">
-        <AspectRatio>
-          <Skeleton className="h-full w-full rounded-2xl" />
-        </AspectRatio>
-      </div>
-      <div className="basis-1/2 space-y-4">
-        <Skeleton className="h-12 w-2/3" />
-        <Skeleton className="h-6 w-1/2" />
-        <Skeleton className="h-4 w-1/3" />
-      </div>
-    </div>
-  )
-}
-
-type NFTTabsProps = {
-  nft?: NftDto
-}
-
-const NFTTabs = ({ nft }: NFTTabsProps) => {
-  return (
-    <Tabs defaultValue="nfts" className="w-full">
-      <TabsList className="mb-6 w-full lg:mb-10">
-        <TabsTrigger value="nfts">NFTs</TabsTrigger>
-        <TabsTrigger value="drops">Drops</TabsTrigger>
-      </TabsList>
-      <TabsContent value="nfts">
-        <NFTInfo nft={nft} />
-      </TabsContent>
-      <TabsContent value="drops">
-        <div className="mx-auto max-w-2xl">
-          {nft?.drops?.map((drop) => (
-            // @ts-ignore
-            <DropItem nftDrop={drop} />
-          ))}
-        </div>
-      </TabsContent>
-    </Tabs>
-  )
-}
-
-const NFTInfo = ({ nft }: { nft?: NftDto }) => {
+export const NFTInfo = ({ nft }: { nft?: NftDto }) => {
   return (
     <div className="mx-auto max-w-xl">
       <div className="relative flex flex-col rounded-2xl bg-white shadow-card md:flex-row">

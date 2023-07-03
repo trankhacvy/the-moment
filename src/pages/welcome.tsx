@@ -59,7 +59,6 @@ const WelcomePage: NextPage = () => {
               </Typography>
               <div className="text-brand-secondary flex gap-2 text-sm font-medium">
                 <Typography>{errorSigningIn}.</Typography>
-                {/* <span className="cursor-pointer underline">Send link again?</span> */}
               </div>
             </div>
           ) : (

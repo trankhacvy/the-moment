@@ -4,10 +4,11 @@
 
 @layer base {
   body {
-    @apply min-h-screen w-full text-gray-800 antialiased dark:text-white;
+    @apply text-gray-800 antialiased dark:text-white;
   }
 
   html,
+  body,
   #__next {
     @apply h-full w-full;
   }

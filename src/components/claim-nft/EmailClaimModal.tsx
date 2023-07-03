@@ -84,9 +84,9 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
                 </Typography>
                 <Typography color="secondary">You've successfully claimed the NFT</Typography>
                 {/* // TODO update URL */}
-                <Link className="text-gray-900 underline" href={`/claim/${nftDrop.suffix}/profile`}>
+                {/* <Link className="text-gray-900 underline" href={`/claim/${nftDrop.suffix}/profile`}>
                   View in your profile
-                </Link>
+                </Link> */}
               </div>
             ) : (
               <Button loading={loading} scheme="default" onClick={claim} fullWidth>

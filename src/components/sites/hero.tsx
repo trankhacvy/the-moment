@@ -24,7 +24,7 @@ export const HeroSection = () => {
               <p className="mb-6 text-center text-gray-600 dark:text-white md:text-lg lg:mb-8 lg:text-left lg:text-xl">
                 Effortlessly create and distribute POAPs with cost-effective compressed NFT
               </p>
-              <Link href={Routes.INDEX}>
+              <Link href={Routes.LOGIN}>
                 <Button size="lg" className="px-5" endDecorator={<ArrowRightIcon />}>
                   Get started
                 </Button>
@@ -33,8 +33,8 @@ export const HeroSection = () => {
           </div>
           <div className="hidden w-full min-w-0 grow-0 basis-[auto] p-4 md:p-6 lg:block lg:w-1/2">
             <div className="w-5/6">
-              <AspectRatio ratio={3606 / 4095}>
-                <Image alt="hero" fill src="/assets/hero.png" />
+              <AspectRatio ratio={1485 / 1368}>
+                <Image alt="hero" fill src="/assets/hero1.png" />
               </AspectRatio>
             </div>
           </div>

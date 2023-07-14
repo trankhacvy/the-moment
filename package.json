@@ -19,7 +19,6 @@
     "e2e:ui": "playwright test --ui",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "postinstall": "npx patch-package -y",
-    "preinstall": "npx only-allow yarn",
     "coupling-graph": "npx madge --extensions js,jsx,ts,tsx,css,md,mdx ./ --exclude '.next|tailwind.config.js|reset.d.ts|prettier.config.js|postcss.config.js|playwright.config.ts|next.config.js|next-env.d.ts|instrumentation.ts|e2e/|README.md|.storybook/|.eslintrc.js' --image graph.svg",
     "supabase:types": "supabase gen types typescript --project-id gsohmicqdlihspbntfet > src/types/supabase.types.ts",
     "gen-schema": "npx swagger-typescript-api -p http://localhost:8080/documentation-json -o ./src/types -n apis.ts --no-client --union-enums --extract-request-params --extract-request-body --extract-response-body --another-array-type"
@@ -148,6 +147,5 @@
   },
   "engines": {
     "node": ">=18.15.0"
-  },
-  "packageManager": "yarn@1.22.19"
+  }
 }

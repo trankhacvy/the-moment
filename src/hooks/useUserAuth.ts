@@ -5,7 +5,7 @@ import { Routes } from "@/config/routes"
 
 export const useUserAuth = (authRoute: "sign-in" | "dashboard" | null = "dashboard") => {
   const { push, query } = useRouter()
-  const { nextUrl } = query as { nextUrl: string }
+  const { next_url } = query as { next_url: string }
 
   const [isRouteAccess, setIsRouteAccess] = useState(true)
 
@@ -19,7 +19,7 @@ export const useUserAuth = (authRoute: "sign-in" | "dashboard" | null = "dashboa
       if (!isLoading) {
         setIsRouteAccess(true)
         if (user) {
-          if (nextUrl) push(nextUrl)
+          if (next_url) push(next_url)
           else {
             if (authRoute === "sign-in") {
               push(Routes.DASHBOARD)
@@ -37,10 +37,9 @@ export const useUserAuth = (authRoute: "sign-in" | "dashboard" | null = "dashboa
             return
           }
         }
-      } else {
       }
     }
-  }, [isLoading, user, error, isRouteAccess, authRoute, nextUrl])
+  }, [isLoading, user, error, isRouteAccess, authRoute, next_url])
 
   return {
     isLoading: isRouteAccess,

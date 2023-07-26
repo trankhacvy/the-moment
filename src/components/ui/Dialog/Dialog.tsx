@@ -90,7 +90,7 @@ const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
 )
 
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col-reverse pt-6 sm:flex-row sm:justify-end sm:space-x-4", className)} {...props} />
+  <div className={cn("flex flex-col-reverse pt-6 sm:flex-row sm:justify-end", className)} {...props} />
 )
 
 const DialogTitle = React.forwardRef<

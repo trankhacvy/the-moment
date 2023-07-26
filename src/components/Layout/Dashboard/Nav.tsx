@@ -28,7 +28,7 @@ export const DashboardNav = () => {
       <div className="fixed left-0 top-0 z-0 h-full w-[280px] overflow-y-auto border-r border-dashed border-r-gray-500/24">
         <div className="mb-4 px-5 py-6">
           <a href="/dashboard">
-            <img src="/assets/minions.png" className="h-10 w-10 rounded-md" />
+            <img src="/assets/logo.jpg" className="h-10 w-10 rounded-md" />
           </a>
         </div>
         <div className="flex h-96 flex-col">

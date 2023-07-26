@@ -16,7 +16,7 @@ import { SiteHeader } from "@/components/sites/SiteHeader"
 import { APP_BASE_URL } from "@/config/env"
 
 const formSchema = z.object({
-  email: z.string().min(1, { message: "Email is required" }).email("Email must be a valid email address"),
+  email: z.string().trim().min(1, { message: "Email is required" }).email("Email must be a valid email address"),
 })
 
 const LoginPage = () => {
@@ -41,7 +41,7 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="bg-gradient-to-r from-[#C9FFBF] to-[#FFAFBD]">
+    <div className="bg-blur-image">
       <SiteHeader />
 
       <div className="flex min-h-screen items-center justify-center px-4 py-24 md:px-0">

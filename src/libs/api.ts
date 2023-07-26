@@ -19,6 +19,7 @@ import {
   NftDto,
   SocialUserRegisterDto,
   UpdateNftDto,
+  UpdateWebsiteDropDto,
   UserDto,
   WithdrawNFTDto,
 } from "@/types/apis"
@@ -141,19 +142,23 @@ class Client {
     })
   }
 
-  public createNFT(body: CreateNftDto) {
+  public createNFT(data: FormData) {
     return fetcher<NftDto>(`${this.baseUrl}/nfts`, {
-      headers: this.getPrivateToken(),
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+      },
       method: "POST",
-      body: JSON.stringify(body),
+      body: data,
     })
   }
 
-  public updateNFT(nftId: string, body: UpdateNftDto) {
+  public updateNFT(nftId: string, data: FormData) {
     return fetcher<NftDto>(`${this.baseUrl}/nfts/${nftId}`, {
-      headers: this.getPrivateToken(),
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+      },
       method: "PUT",
-      body: JSON.stringify(body),
+      body: data,
     })
   }
 
@@ -183,13 +188,20 @@ class Client {
     })
   }
 
-  // public getCreateDropTransaction(body: CreateDropTXDto) {
-  //   return fetcher<{ id: string; transaction: string }>(`${this.baseUrl}/transactions/create-drop-transaction`, {
-  //     headers: this.getPrivateToken(),
-  //     method: "POST",
-  //     body: JSON.stringify(body),
-  //   })
-  // }
+  public updateWebsiteDrop(dropId: string, body: UpdateWebsiteDropDto) {
+    return fetcher<CheckoutDropDto>(`${this.baseUrl}/drops/website/${dropId}`, {
+      headers: this.getPrivateToken(),
+      method: "PUT",
+      body: JSON.stringify(body),
+    })
+  }
+
+  public deleteDrop(dropId: string) {
+    return fetcher(`${this.baseUrl}/drops/${dropId}`, {
+      headers: this.getPrivateToken(),
+      method: "DELETE",
+    })
+  }
 
   public checkDropSuffix(suffix: string) {
     return fetcher<any>(`${this.baseUrl}/drops/check-drop-suffix/${suffix}`, {
@@ -200,6 +212,16 @@ class Client {
   public getDropBySlug(slug: string) {
     return fetcher<DropDto>(`${this.baseUrl}/drops/slug/${slug}`, {
       headers: this.headers,
+    })
+  }
+
+  public repayDrop(dropId: string, callbackURL: string) {
+    return fetcher<CheckoutDropDto>(`${this.baseUrl}/drops/${dropId}/repay`, {
+      headers: this.getPrivateToken(),
+      method: "POST",
+      body: JSON.stringify({
+        callback: callbackURL,
+      }),
     })
   }
 
@@ -233,8 +255,8 @@ class Client {
     })
   }
 
-  public getClaims(query: ClaimsControllerGetClaimsByDropParams) {
-    return fetcher<ClaimsControllerGetClaimsByDropData>(`${this.baseUrl}/claims/drops/all?${qs.stringify(query)}`, {
+  public getClaims(dropId: string) {
+    return fetcher<ClaimsControllerGetClaimsByDropData>(`${this.baseUrl}/claims/drops/${dropId}`, {
       headers: this.headers,
     })
   }

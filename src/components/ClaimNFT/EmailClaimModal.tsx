@@ -16,7 +16,7 @@ import { useEffect, useState } from "react"
 import { useToast } from "../ui/Toast"
 import { client } from "@/libs/api"
 import Link from "next/link"
-import { useUserAuth } from "@/hooks/use-user-auth"
+import { useUserAuth } from "@/hooks/useUserAuth"
 
 type EmailClaimModalProps = {
   trigger: React.ReactNode

@@ -1,10 +1,8 @@
 import { useNFTs } from "@/hooks/useNFTs"
 import { NFTItem, NFTItemSkeleton } from "./NFTItem"
-import { useUser } from "@/hooks/use-user"
+import { useUser } from "@/hooks/useUser"
 import { DatabaseIcon } from "lucide-react"
 import { Typography } from "../ui/Typography"
-
-export type NFTListProps = {}
 
 export const NFTList = () => {
   const { user } = useUser()
@@ -13,7 +11,7 @@ export const NFTList = () => {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 9 }).map((_, idx) => (
+        {Array.from({ length: 6 }).map((_, idx) => (
           <NFTItemSkeleton key={idx} />
         ))}
       </div>
@@ -32,10 +30,8 @@ export const NFTList = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {isLoading
-        ? Array.from({ length: 9 }).map((_, idx) => <NFTItemSkeleton key={idx} />)
-        : nfts?.data.map((nft) => <NFTItem key={nft.id} nft={nft} />)}
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {nfts?.data.map((nft) => <NFTItem key={nft.id} nft={nft} />)}
     </div>
   )
 }

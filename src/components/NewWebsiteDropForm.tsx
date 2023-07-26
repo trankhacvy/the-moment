@@ -15,7 +15,7 @@ import { client } from "@/libs/api"
 import { useToast } from "@/components/ui/Toast"
 import { useRouter } from "next/router"
 import { APP_BASE_URL } from "@/config/env"
-import { WebisteDropConfirmModal } from "./website-drop-confirm-modal"
+import { WebisteDropConfirmModal } from "./WebisteDropConfirmModal"
 import { useState } from "react"
 import { Routes } from "@/config/routes"
 
@@ -57,8 +57,8 @@ export const NewWebisteDropForm = ({ nftId }: { nftId: string }) => {
   const methods = useForm<z.infer<typeof newMintWebsiteSchema>>({
     resolver: zodResolver(newMintWebsiteSchema),
     defaultValues: {
-      startDate: "",
-      endDate: "",
+      startDate: dayjs().add(1, "d").format("YYYY-MM-DDThh:mm"),
+      endDate: dayjs().add(1, "d").add(10, "minutes").format("YYYY-MM-DDThh:mm"),
       suffix: "",
       duration: Duration.TEN_MIN,
     },
@@ -88,7 +88,7 @@ export const NewWebisteDropForm = ({ nftId }: { nftId: string }) => {
         slug: slugify(values.suffix),
         startAt: dayjs(values.startDate).toISOString(),
         endAt: endDate,
-        callback: APP_BASE_URL,
+        callback: `${APP_BASE_URL}/dashboard/nfts/${nftId}`,
       })
 
       window.open(response?.paymentUrl, "_blank")?.focus()
@@ -98,7 +98,7 @@ export const NewWebisteDropForm = ({ nftId }: { nftId: string }) => {
         title: "Success",
       })
 
-      replace(Routes.DROP_DETAIL(nftId, response.dropId))
+      replace(Routes.NFT_DETAIL(nftId))
     } catch (error: any) {
       setIsOpen(false)
       console.error(error)

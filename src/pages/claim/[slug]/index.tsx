@@ -1,6 +1,6 @@
 import { NextSeo } from "next-seo"
-import { SolanaQRCode } from "@/components/claim-nft/SolanaPayQRCode"
-import { WalletClaimModal } from "@/components/claim-nft/WalletClaimModal"
+import { SolanaQRCode } from "@/components/ClaimNFT/SolanaPayQRCode"
+import { WalletClaimModal } from "@/components/ClaimNFT/WalletClaimModal"
 import { AspectRatio } from "@/components/ui/AspectRatio"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/Tooltip"
 import { Typography } from "@/components/ui/Typography"
@@ -13,14 +13,15 @@ import { ReactElement, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { APP_BASE_URL } from "@/config/env"
 import { signIn } from "next-auth/react"
-import { EmailClaimModal } from "@/components/claim-nft/EmailClaimModal"
+import { EmailClaimModal } from "@/components/ClaimNFT/EmailClaimModal"
 import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/Button"
 import { useWalletLogin } from "@/utils/authOptions"
 import { SiteLayout } from "@/components/sites/SiteLayout"
 import { useWallet } from "@solana/wallet-adapter-react"
-import { useUserAuth } from "@/hooks/use-user-auth"
+import { useUserAuth } from "@/hooks/useUserAuth"
 import { EmailLoginModal } from "@/components/sites/EmailLoginModal"
+import BlurImage from "@/components/ui/BlurImage"
 
 const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const nft = nftDrop.nft as NftDto
@@ -52,7 +53,7 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
   }, [claimParam, isLoggedIn])
 
   return (
-    <div>
+    <>
       <NextSeo
         title={`Claim ${nft.name} NFT | ${siteConfig.name}`}
         description={`${siteConfig.name} - The easiest way to claim your POAP on Solana.`}
@@ -70,7 +71,7 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
         <div className="-mx-4 flex flex-wrap md:-mx-8">
           <div className="w-full grow-0 p-4 md:w-5/12 md:p-8">
             <AspectRatio className="overflow-hidden rounded-xl">
-              <Image alt={nft.name} src={nft.image} fill />
+              <BlurImage alt={nft.name} src={nft.image} fill />
             </AspectRatio>
             <div className="mx-auto mt-6 flex items-center justify-center gap-3 md:hidden">
               <SolanaQRCode
@@ -306,7 +307,7 @@ const ClaimPage = ({ nftDrop }: InferGetStaticPropsType<typeof getStaticProps>) 
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

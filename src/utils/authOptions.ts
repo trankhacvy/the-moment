@@ -9,7 +9,7 @@ import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import { useCallback, useEffect, useState } from "react"
 import { getCsrfToken, signIn } from "next-auth/react"
-import { useUserAuth } from "@/hooks/use-user-auth"
+import { useUserAuth } from "@/hooks/useUserAuth"
 import { useRouter } from "next/router"
 
 const providers = [

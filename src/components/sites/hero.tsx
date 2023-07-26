@@ -7,13 +7,7 @@ import Link from "next/link"
 
 export const HeroSection = () => {
   return (
-    <div
-      style={{
-        background:
-          "linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)) center center / cover no-repeat, url(/assets/overlay.jpg)",
-      }}
-      className="overflow-hidden bg-center bg-no-repeat"
-    >
+    <div className="overflow-hidden bg-blur-image bg-center bg-no-repeat">
       <div className="mx-auto block max-w-screen-xl px-4 py-20 md:px-6 lg:flex lg:min-h-screen lg:items-center">
         <div className="jusify-center flex w-full flex-row flex-wrap items-center justify-between py-10">
           <div className="w-full min-w-0 grow-0 basis-[auto] p-4 md:p-6 lg:w-1/2">

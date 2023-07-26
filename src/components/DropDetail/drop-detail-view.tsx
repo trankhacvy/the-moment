@@ -21,7 +21,7 @@ export const DropDetailView = ({ drop }: DropDetailViewProps) => {
   }
 
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-card">
+    <div className="max-w-screen-md mx-auto rounded-2xl bg-white p-6 shadow-card">
       <div className="flex items-center justify-between">
         <Typography as="h6" level="body2" className="font-bold">
           Drop information

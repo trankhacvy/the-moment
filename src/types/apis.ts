@@ -120,16 +120,12 @@ export interface CreateNftDto {
   description?: string
   /** @maxLength 10 */
   symbol: string
-  image: string
   isMutable?: boolean
   /**
    * @minLength -1
    * @maxLength 256
    */
   externalUrl?: string
-  isCollection?: boolean
-  /** @minLength -1 */
-  collectionAddress?: string
   sellerFeeBasisPoints?: number
   attributes?: Array<{
     traitType?: string
@@ -152,12 +148,12 @@ export interface NftDto {
   isMutable?: boolean
   /** @minLength -1 */
   externalUrl?: string
-  isCollection?: boolean
-  /** @minLength -1 */
-  collectionAddress?: string
   sellerFeeBasisPoints?: number
-  attributes?: object
-  drops?: Array<string>
+  attributes?: Array<{
+    traitType?: string
+    value?: string
+  }>
+  drops?: Array<Array<any>>
 }
 
 export interface UpdateNftDto {
@@ -167,14 +163,9 @@ export interface UpdateNftDto {
   description?: string
   /** @minLength -1 */
   symbol?: string
-  /** @minLength -1 */
-  image?: string
   isMutable?: boolean
   /** @minLength -1 */
   externalUrl?: string
-  isCollection?: boolean
-  /** @minLength -1 */
-  collectionAddress?: string
   sellerFeeBasisPoints?: number
   attributes?: Array<{
     traitType?: string
@@ -182,29 +173,30 @@ export interface UpdateNftDto {
   }>
 }
 
+export type DropDuration = "FIFTEEN_MIN" | "THIRTY_MIN" | "ONE_HOUR" | "CUSTOM"
+
 export interface CreateWebsiteDropDto {
   /** @format uuid */
   nftId: string
   amount: number
   /** @minLength -1 */
   callback?: string
-  /** @minLength -1 */
+  /**
+   * @minLength 3
+   * @maxLength 128
+   */
   slug?: string
   /**
    * @format date-time
    * @minLength -1
    */
   startAt?: string
+  duration?: DropDuration
   /**
    * @format date-time
    * @minLength -1
    */
   endAt?: string
-  /**
-   * @minLength 3
-   * @maxLength 32
-   */
-  password?: string
 }
 
 export interface CheckoutDropDto {
@@ -213,19 +205,62 @@ export interface CheckoutDropDto {
   paymentUrl: string
 }
 
-export interface CreateWhitelistWebsiteDropDto {
-  /** @format uuid */
-  nftId: string
-  amount: number
-  /** @minLength -1 */
-  callback?: string
-  /** @minLength -1 */
+export interface UpdateWebsiteDropDto {
+  /**
+   * @minLength 3
+   * @maxLength 128
+   */
   slug?: string
   /**
    * @format date-time
    * @minLength -1
    */
   startAt?: string
+  duration?: DropDuration
+  /**
+   * @format date-time
+   * @minLength -1
+   */
+  endAt?: string
+}
+
+export interface WebsiteDropDto {
+  id: string
+  /** @format date-time */
+  createdAt: string
+  /** @format date-time */
+  updatedAt: string
+  slug: string
+  /**
+   * @format date-time
+   * @minLength -1
+   */
+  startAt?: string
+  duration?: DropDuration
+  /**
+   * @format date-time
+   * @minLength -1
+   */
+  endAt?: string
+}
+
+export interface CreateSecretDropDto {
+  /** @format uuid */
+  nftId: string
+  amount: number
+  /** @minLength -1 */
+  callback?: string
+  /**
+   * @minLength 3
+   * @maxLength 128
+   */
+  slug?: string
+  /**
+   * @format date-time
+   * @minLength -1
+   */
+  startAt?: string
+  duration?: DropDuration
   /**
    * @format date-time
    * @minLength -1
@@ -235,8 +270,7 @@ export interface CreateWhitelistWebsiteDropDto {
    * @minLength 3
    * @maxLength 32
    */
-  password?: string
-  whitelistAddresses: Array<string>
+  password: string
 }
 
 export interface CreateMintLinkDropDto {
@@ -247,52 +281,31 @@ export interface CreateMintLinkDropDto {
   callback?: string
 }
 
-export interface CheckoutDto {
+export interface DropCheckoutDto {
   id: string
-  /** @format date-time */
-  createdAt: string
-  /** @format date-time */
-  updatedAt: string
-  sessionId: string
-  orderId: string
   /** @example ["INIT","PAID","FAILED"] */
   status: "INIT" | "PAID" | "FAILED"
+  amount: number
 }
 
-export interface DropMethodDto {
+export interface MintLinkDto {
   id: string
   /** @format date-time */
   createdAt: string
   /** @format date-time */
   updatedAt: string
-  /** @example ["WEBSITE","MINT_LINK","SECRET","WHITELIST"] */
-  method: "WEBSITE" | "MINT_LINK" | "SECRET" | "WHITELIST"
-  /** @minLength -1 */
-  slug?: string
-  /**
-   * @format date-time
-   * @minLength -1
-   */
-  startAt?: string
-  /**
-   * @format date-time
-   * @minLength -1
-   */
-  endAt?: string
-  /**
-   * @minLength 3
-   * @maxLength 32
-   */
-  password?: string
-  /** @minLength -1 */
-  whitelistAddress?: string
-  /** @minLength -1 */
-  mintLink?: string
-  /**
-   * @format date-time
-   * @minLength -1
-   */
-  expireAt?: string
+  link: string
+  /** @format date-time */
+  expiredAt: string
+}
+
+export interface MintLinkDropDto {
+  id: string
+  /** @format date-time */
+  createdAt: string
+  /** @format date-time */
+  updatedAt: string
+  mintLinks?: Array<MintLinkDto>
 }
 
 export interface DropDto {
@@ -301,29 +314,46 @@ export interface DropDto {
   createdAt: string
   /** @format date-time */
   updatedAt: string
-  amount: number
+  approvedAmount: number
+  requestedAmount: number
   /** @example ["WEBSITE","MINT_LINK","SECRET","WHITELIST"] */
   method: "WEBSITE" | "MINT_LINK" | "SECRET" | "WHITELIST"
   /** @example ["WAITING_FOR_PAYMENT","PAYMENT_FAILED","PROCESSING","ACTIVE","ENDED"] */
   status: "WAITING_FOR_PAYMENT" | "PAYMENT_FAILED" | "PROCESSING" | "ACTIVE" | "ENDED"
   nft?: NftDto
   minted: number
-  checkout: CheckoutDto
-  methods: Array<DropMethodDto>
+  request: DropCheckoutDto
+  websiteDrop: WebsiteDropDto
+  mintLinkDrop: MintLinkDropDto
 }
 
-export interface CreateCheckoutDto {
-  sessionId: string
-  orderId: string
-  paymentUrl: string
-  /** @format uuid */
-  dropId: string
+export interface RequestDropAmountDto {
+  amount: number
+  /** @minLength -1 */
+  callback?: string
 }
 
-export interface UpdateCheckoutDto {
+export interface RepayDto {
   sessionId: string
-  /** @example ["INIT","PAID","FAILED"] */
-  status: "INIT" | "PAID" | "FAILED"
+}
+
+export type WebhookStatus = "transaction.successful" | "transaction.failed"
+
+export type Network = "devnet" | "testnet" | "mainnet-beta"
+
+export interface WebhookDto {
+  customer: string
+  customer_email: string
+  event: WebhookStatus
+  items: Array<string>
+  metadata: object
+  network: Network
+  order_id: string
+  payment_amount: number
+  payment_currency: string
+  session_id: string
+  signature: string
+  timestamp: string
 }
 
 export interface CreateTreeDto {
@@ -334,7 +364,6 @@ export interface CreateTreeDto {
 }
 
 export interface TransactionResponseDto {
-  id: string
   transaction: string
 }
 
@@ -349,8 +378,6 @@ export interface TreeDto {
 export interface CreateClaimByWalletDto {
   /** @format uuid */
   dropId: string
-  /** @format uuid */
-  dropMethodId: string
   network: string
   claimant: string
 }
@@ -369,23 +396,10 @@ export interface ClaimDto {
   claimAt: string
   /** @example ["QR_CODE","WALLET","EMAIL"] */
   method: "QR_CODE" | "WALLET" | "EMAIL"
-  /** @format uuid */
-  dropId: string
-  /** @format uuid */
-  ownerId: string
-  /** @format uuid */
-  dropMethodId: string
   /** @minLength -1 */
   signature?: string
-}
-
-export interface CreateClaimByEmailDto {
-  /** @format uuid */
-  dropId: string
-  /** @format uuid */
-  dropMethodId: string
-  network: string
-  email: string
+  /** @example ["QR_CODE","WALLET","EMAIL"] */
+  drop: "QR_CODE" | "WALLET" | "EMAIL"
 }
 
 export interface WithdrawNFTDto {
@@ -399,22 +413,6 @@ export interface WithdrawNFTDto {
 export interface SolanaPayClaimGetDto {
   label: string
   icon: string
-}
-
-export interface SolanaPayClaimPostDto {
-  account: string
-}
-
-export interface CreateDropTXDto {
-  payer: string
-  /** @format uuid */
-  nftId: string
-  amount: number
-  network: string
-}
-
-export interface SolanaPayPostDto {
-  account: string
 }
 
 export type AuthControllerUserLoginData = LoginPayloadDto
@@ -463,7 +461,7 @@ export type UserControllerUpdateUderData = any
 
 export type UserControllerGetUserData = UserDto
 
-export interface UserControllerGetNfTsParams {
+export interface UserControllerGetNfTsV1Params {
   order?: Order
   /**
    * @min 1
@@ -481,7 +479,12 @@ export interface UserControllerGetNfTsParams {
   id: string
 }
 
-export type UserControllerGetNfTsData = UserDto
+export type UserControllerGetNfTsV1Data = UserDto
+
+export type NftControllerCreateNftPayload = CreateNftDto & {
+  /** @format binary */
+  image?: File
+}
 
 export type NftControllerCreateNftData = NftDto
 
@@ -507,6 +510,11 @@ export type NftControllerGetAllNfTsData = PageDto & {
 }
 
 export type NftControllerGetNftData = NftDto
+
+export type NftControllerUpdateNftPayload = UpdateNftDto & {
+  /** @format binary */
+  image?: File
+}
 
 export type NftControllerUpdateNftData = any
 
@@ -534,19 +542,27 @@ export type NftControllerGetDropsByNftData = PageDto
 
 export type NftDropsControllerCreateWebsiteDropData = CheckoutDropDto
 
-export type NftDropsControllerCreateWhitelistDropData = CheckoutDropDto
+export type NftDropsControllerUpdateWebsiteDropData = WebsiteDropDto
+
+export type NftDropsControllerCreateSecretDropData = CheckoutDropDto
 
 export type NftDropsControllerCreateMintLinksDropData = CheckoutDropDto
 
 export type NftDropsControllerGetDropData = DropDto
 
-export type NftDropsControllerGetWebsiteDropBySlugData = DropDto
+export type NftDropsControllerGetDropBySlugData = DropDto
 
-export type CheckoutControllerCreateCheckoutData = CheckoutDto
+export type NftDropsControllerGetDropByMintLinkData = DropDto
 
-export type CheckoutControllerUpdateCheckoutData = CheckoutDto
+export type NftDropsControllerRequestAmountData = CheckoutDropDto
+
+export type NftDropsControllerRepayData = CheckoutDropDto
 
 export type CheckoutControllerWebhookData = any
+
+export type CheckoutControllerSimulateWebhookData = any
+
+export type CheckoutControllerRepayData = CheckoutDropDto
 
 export interface HealthCheckerControllerCheckData {
   /** @example "ok" */
@@ -583,8 +599,6 @@ export type TreesControllerFindTreeData = TreeDto
 
 export type ClaimsControllerClaimByWalletData = ClaimDto
 
-export type ClaimsControllerClaimByEmailData = ClaimDto
-
 export type ClaimsControllerClaimByQrData = ClaimDto
 
 export type ClaimsControllerWithdrawNftData = ClaimDto
@@ -597,15 +611,6 @@ export interface ClaimsControllerSolanaClaimGetParams {
 }
 
 export type ClaimsControllerSolanaClaimGetData = SolanaPayClaimGetDto
-
-export interface ClaimsControllerSolanaClaimPostParams {
-  /** @format uuid */
-  dropId: string
-  network: string
-  reference: string
-}
-
-export type ClaimsControllerSolanaClaimPostData = TransactionResponseDto
 
 export interface ClaimsControllerGetClaimsByDropParams {
   order?: Order
@@ -622,35 +627,9 @@ export interface ClaimsControllerGetClaimsByDropParams {
   take?: number
   /** @minLength -1 */
   q?: string
-  /** @format uuid */
   dropId: string
 }
 
 export type ClaimsControllerGetClaimsByDropData = PageDto & {
   results?: Array<ClaimDto>
 }
-
-export type TransactionControllerGetCreateDropTxData = TransactionResponseDto
-
-export interface TransactionControllerVerifyTransferParams {
-  /** @format uuid */
-  transactionId: string
-  signature: string
-  amount: number
-}
-
-export type TransactionControllerVerifyTransferData = any
-
-export interface TransactionControllerGetSolanaPayDropInfoParams {
-  nftName: string
-  nftImage: string
-}
-
-export type TransactionControllerGetSolanaPayDropInfoData = any
-
-export interface TransactionControllerGetSolanaPayTransactionParams {
-  /** @format uuid */
-  dropId: string
-}
-
-export type TransactionControllerGetSolanaPayTransactionData = any

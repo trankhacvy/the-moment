@@ -1,14 +1,13 @@
 import { ReactElement } from "react"
-import { AdminLayout } from "@/components/AdminLayout"
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs"
 import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
-import { NewNFTForm } from "@/components/new-nft/NewNFTForm"
+import { NewNFTForm } from "@/components/NewNFT/NewNFTForm"
 import { useRouter } from "next/router"
 import { useNFT } from "@/hooks/useNFT"
 import { Skeleton } from "@/components/ui/Skeleton"
-import { DashboardLayout } from "@/layouts/dashboard-layout"
+import { DashboardLayout } from "@/components/Layout/Dashboard/Layout"
 
 const EditNFTPage: NextPageWithLayout = () => {
   const { query } = useRouter()

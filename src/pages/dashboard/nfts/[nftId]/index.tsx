@@ -3,11 +3,11 @@ import { useRouter } from "next/router"
 import type { ReactElement } from "react"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
-import { NFTDetail, NFTDetailSkeleton } from "@/components/nft-detail/nft-detail-view"
+import { NFTDetailView, NFTDetailSkeleton } from "@/components/NFTDetail/NFTDetailView"
 import { useNFT } from "@/hooks/useNFT"
 import { Button } from "@/components/ui/Button"
 import { ChevronLeftIcon } from "lucide-react"
-import { DashboardLayout } from "@/layouts/dashboard-layout"
+import { DashboardLayout } from "@/components/Layout/Dashboard/Layout"
 
 const NFTDetailPage: NextPageWithLayout = () => {
   const { query } = useRouter()
@@ -16,15 +16,14 @@ const NFTDetailPage: NextPageWithLayout = () => {
   const { nft, isLoading } = useNFT(nftId)
 
   return (
-    <>
+    <div className="max-w-screen-xl mx-auto">
       <div className="mb-6 flex items-center justify-between lg:mb-10">
         <Button as={Link} href={Routes.DASHBOARD} variant="link" startDecorator={<ChevronLeftIcon />}>
           Back
         </Button>
       </div>
-
-      {isLoading ? <NFTDetailSkeleton /> : <NFTDetail nft={nft} />}
-    </>
+      {isLoading ? <NFTDetailSkeleton /> : <NFTDetailView nft={nft} />}
+    </div>
   )
 }
 

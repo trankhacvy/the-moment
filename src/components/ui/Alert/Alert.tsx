@@ -4,7 +4,7 @@ import { cn } from "@/utils/cn"
 import AlertContext from "./AlertContext"
 
 const alertVariants = tv({
-  base: "relative flex items-center w-full px-4 py-3 rounded-lg",
+  base: "relative flex items-start w-full px-4 py-3 rounded-lg",
   variants: {
     variant: {
       info: "bg-info-100 text-info-900",

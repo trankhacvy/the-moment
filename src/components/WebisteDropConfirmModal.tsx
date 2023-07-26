@@ -14,13 +14,14 @@ import { Button } from "@/components/ui/Button"
 import { IconButton } from "@/components/ui/IconButton"
 import { FileQuestionIcon, XIcon } from "lucide-react"
 import { useFormContext } from "react-hook-form"
-import { Duration, newMintWebsiteSchema } from "./new-website-drop-form"
+// import { Duration, newMintWebsiteSchema } from "./NewWebsiteDropForm"
 import dayjs from "dayjs"
 import { NFT_PRICE } from "@/config/common"
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/Tooltip"
 import { APP_BASE_URL } from "@/config/env"
+import { Duration, newMintWebsiteSchema } from "./CreateWebsiteDropSheet"
 
 type WebisteDropConfirmModalProps = {
-  //   trigger: React.ReactNode
   onSubmit: any
   isOpen?: boolean
   onOpenChange?: (isOpen: boolean) => void
@@ -36,7 +37,7 @@ export const WebisteDropConfirmModal = ({ isOpen, onOpenChange, onSubmit }: Webi
   const suffix = watch("suffix")
 
   if (startDate) {
-    if (duration === Duration.TEN_MIN) {
+    if (duration === Duration.FIFTEEN_MIN) {
       endDate = dayjs(startDate).add(10, "minutes").toISOString()
     } else if (duration === Duration.THIRTY_MIN) {
       endDate = dayjs(startDate).add(30, "minutes").toISOString()
@@ -48,7 +49,6 @@ export const WebisteDropConfirmModal = ({ isOpen, onOpenChange, onSubmit }: Webi
   return (
     <>
       <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
-        {/* <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger> */}
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle>Create confirmation</AlertDialogTitle>
@@ -65,11 +65,18 @@ export const WebisteDropConfirmModal = ({ isOpen, onOpenChange, onSubmit }: Webi
             </div>
             <div className="flex items-center justify-between">
               <Typography color="secondary" level="body4">
-                Mint website
+                Mint URL
               </Typography>
-              <Typography className="font-bold underline" level="body4">
-                {`${APP_BASE_URL}/claim/${suffix}`}
-              </Typography>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Typography className="font-bold underline" level="body4">
+                    {suffix}
+                  </Typography>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <Typography>{`${APP_BASE_URL}/claim/${suffix}`}</Typography>
+                </TooltipContent>
+              </Tooltip>
             </div>
             <div className="flex items-center justify-between">
               <Typography color="secondary" level="body4">
@@ -88,11 +95,11 @@ export const WebisteDropConfirmModal = ({ isOpen, onOpenChange, onSubmit }: Webi
               </Typography>
             </div>
             <div className="flex items-center justify-between">
-              <Typography color="secondary" level="body4">
-                Cost est
+              <Typography color="secondary" level="body4" className="font-bold">
+                Cost
               </Typography>
               <Typography color="primary" className="font-bold" level="body4">
-                {NFT_PRICE * amount} SOL
+                {NFT_PRICE * amount} USD
               </Typography>
             </div>
           </AlertDialogDescription>

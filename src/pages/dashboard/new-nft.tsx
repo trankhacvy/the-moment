@@ -4,7 +4,7 @@ import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
 import { NewNFTForm } from "@/components/new-nft/NewNFTForm"
-import { DashboardLayout } from "@/layouts/dashboard-layout"
+import { DashboardLayout } from "@/components/Layout/Dashboard/Layout"
 
 const CreateNFTDropPage: NextPageWithLayout = () => {
   return (

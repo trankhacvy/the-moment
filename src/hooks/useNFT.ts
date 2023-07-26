@@ -1,6 +1,5 @@
 import { client } from "@/libs/api"
-import { useSession } from "next-auth/react"
-import useSWR, { Fetcher, Key } from "swr"
+import useSWR from "swr"
 
 const SWR_KEY = "/nfts/:id"
 

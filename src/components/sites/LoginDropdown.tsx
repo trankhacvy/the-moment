@@ -10,7 +10,7 @@ import { useWalletLogin } from "@/utils/authOptions"
 import { useRouter } from "next/router"
 import { cn } from "@/utils/cn"
 import Link from "next/link"
-import { useUserAuth } from "@/hooks/use-user-auth"
+import { useUserAuth } from "@/hooks/useUserAuth"
 import { client } from "@/libs/api"
 import { EmailLoginModal } from "./EmailLoginModal"
 

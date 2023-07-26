@@ -1,10 +1,10 @@
 import Link from "next/link"
 import { AspectRatio } from "../ui/AspectRatio"
-import Image from "next/image"
 import { Typography } from "../ui/Typography"
 import { Routes } from "@/config/routes"
 import { Skeleton } from "../ui/Skeleton"
 import { NftDto } from "@/types/apis"
+import BlurImage from "../ui/BlurImage"
 
 type NFTItemProps = {
   nft: NftDto
@@ -15,13 +15,10 @@ export const NFTItem = ({ nft }: NFTItemProps) => {
     <Link href={Routes.NFT_DETAIL(nft.id)}>
       <div className="overflow-hidden rounded-2xl bg-white shadow-card">
         <AspectRatio>
-          <Image src={nft.image} alt={nft.name} fill />
+          <BlurImage src={nft.image} alt={nft.name} fill />
         </AspectRatio>
         <div className="p-5">
-          <Typography className="mb-2 font-semibold">{nft.name}</Typography>
-          <Typography color="secondary" level="body4" className="line-clamp-2 text-ellipsis">
-            {nft.description}
-          </Typography>
+          <Typography className="font-semibold">{nft.name}</Typography>
         </div>
       </div>
     </Link>

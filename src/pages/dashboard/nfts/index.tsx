@@ -7,14 +7,14 @@ import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
 import { NFTList } from "@/components/dashboard/NFTList"
-import { DashboardLayout } from "@/layouts/dashboard-layout"
+import { DashboardLayout } from "@/components/Layout/Dashboard/Layout"
 
 const EventsPage: NextPageWithLayout = () => {
   return (
     <>
       <div className="mb-10 flex items-center justify-between">
-        <div>
-          <Typography as="h4" level="h6" className="mb-2 font-bold">
+        <div className="flex flex-col gap-2">
+          <Typography as="h4" level="h6" className="font-bold">
             Your NFTs
           </Typography>
           <div className="flex items-center justify-between">
@@ -29,7 +29,6 @@ const EventsPage: NextPageWithLayout = () => {
           <Button endDecorator={<PlusIcon />}>New NFT</Button>
         </Link>
       </div>
-
       <NFTList />
     </>
   )

@@ -5,7 +5,7 @@ import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
 import Link from "next/link"
-import { DashboardLayout } from "@/layouts/dashboard-layout"
+import { DashboardLayout } from "@/components/Layout/Dashboard/Layout"
 
 const SettingsPage: NextPageWithLayout = () => {
   return (

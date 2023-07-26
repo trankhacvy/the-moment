@@ -10,7 +10,7 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: false })]], {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ["google.com", "gsohmicqdlihspbntfet.supabase.co"],
+    domains: ["google.com", "gsohmicqdlihspbntfet.supabase.co", "res.cloudinary.com"],
   },
   // experimental: { instrumentationHook: true },
   // rewrites() {

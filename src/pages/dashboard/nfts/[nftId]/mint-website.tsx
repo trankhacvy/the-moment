@@ -4,8 +4,8 @@ import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
 import { useRouter } from "next/router"
-import { DashboardLayout } from "@/layouts/dashboard-layout"
-import { NewWebisteDropForm } from "@/components/new-website-drop-form"
+import { DashboardLayout } from "@/components/Layout/Dashboard/Layout"
+import { NewWebisteDropForm } from "@/components/NewWebsiteDropForm"
 
 const NewMintWebsite: NextPageWithLayout = () => {
   const { query } = useRouter()
@@ -18,9 +18,10 @@ const NewMintWebsite: NextPageWithLayout = () => {
           Create a mint website
         </Typography>
         <Breadcrumbs aria-label="Settings" separator={<span className="mx-2 h-1 w-1 rounded-sm bg-gray-500" />}>
-          <a href={Routes.DASHBOARD}>
+          <a href={Routes.NFT_DETAIL(nftId)}>
+            {/* // TODO get NFT name */}
             <Typography as="span" level="body4">
-              NFTs
+              NFT
             </Typography>
           </a>
           <Typography as="span" level="body4" color="secondary">

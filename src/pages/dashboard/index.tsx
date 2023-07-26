@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button"
 import { Typography } from "@/components/ui/Typography"
 import { NextPageWithLayout } from "@/types"
 import { Routes } from "@/config/routes"
-import { DashboardLayout } from "@/layouts/dashboard-layout"
+import { DashboardLayout } from "@/components/Layout/Dashboard/Layout"
 
 const EventsPage: NextPageWithLayout = () => {
   return (

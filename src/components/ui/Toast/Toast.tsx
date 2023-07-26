@@ -23,11 +23,10 @@ ToastViewport.displayName = ToastPrimitives.Viewport.displayName
 
 const toastVariants = tv({
   base: [
-    // "group relative pointer-events-auto flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all",
     "group relative pointer-events-auto overflow-hidden shadow-lg transition-all",
     "data-[swipe=move]:transition-none data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=end]:animate-out",
-    "data-[state=open]:animate-in data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full",
-    "data-[state=closed]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full",
+    "data-[state=open]:animate-in data-[state=open]:slide-in-from-top-full",
+    "data-[state=closed]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-top-full",
   ],
   variants: {
     variant: {
@@ -45,8 +44,15 @@ const toastVariants = tv({
 const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> & VariantProps<typeof toastVariants>
->(({ className, variant, ...props }, ref) => {
-  return <ToastPrimitives.Root ref={ref} className={cn(toastVariants({ variant }), className)} {...props} />
+>(({ className, variant, duration = 3000, ...props }, ref) => {
+  return (
+    <ToastPrimitives.Root
+      ref={ref}
+      className={cn(toastVariants({ variant }), className)}
+      duration={duration}
+      {...props}
+    />
+  )
 })
 Toast.displayName = ToastPrimitives.Root.displayName
 

@@ -8,7 +8,7 @@ import { Typography } from "@/components/ui/Typography"
 import { Separator } from "@/components/ui/Separator"
 import { truncate } from "@/utils/truncate"
 import { Routes } from "@/config/routes"
-import { useUser } from "@/hooks/use-user"
+import { useUser } from "@/hooks/useUser"
 import { client } from "@/libs/api"
 import { useRouter } from "next/router"
 
@@ -30,7 +30,7 @@ export const DashboardHeader = () => {
   return (
     <header
       className={cn(
-        "fixed right-0 top-0 z-[40] h-16 w-full bg-white/80 backdrop-blur-sm transition-[height] duration-200 ease-in-out lg:h-24 lg:w-[calc(100%-281px)]",
+        "fixed right-0 top-0 z-[40] h-16 w-full transition-[height] duration-200 ease-in-out lg:h-24 lg:w-[calc(100%-281px)]",
         { "lg:h-[60px]": small }
       )}
     >
@@ -55,7 +55,10 @@ const AdminUserMenu = () => {
         <button>
           <Avatar>
             <AvatarImage src={user?.avatar ?? ""} alt={user?.firstName} />
-            <AvatarFallback className="bg-primary-500/16">😃</AvatarFallback>
+            <AvatarFallback className="bg-primary-500 text-white text-xl">
+              {/* <UserIcon /> */}
+              {user?.email.charAt(0)}
+            </AvatarFallback>
           </Avatar>
         </button>
       </PopoverTrigger>

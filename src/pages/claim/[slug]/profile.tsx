@@ -10,14 +10,14 @@ import { useGetClaimsByEmail } from "@/hooks/useGetClaimsByEmail"
 import { NFTItemSkeleton } from "@/components/dashboard/NFTItem"
 import Link from "next/link"
 import { Button } from "@/components/ui/Button"
-import { WithdrawNFTModal } from "@/components/claim-nft/WithdrawNftModal"
+import { WithdrawNFTModal } from "@/components/ClaimNFT/WithdrawNftModal"
 import { useRouter } from "next/router"
 import { ReactElement } from "react"
 import { SiteLayout } from "@/components/sites/SiteLayout"
 import { ProfileTabs } from "@/components/sites/ProfileTabs"
 
 const ProfilePage = () => {
-  const { claims = [], isLoading, mutate } = useGetClaimsByEmail('session?.user?.user.email' as string | undefined)
+  const { claims = [], isLoading, mutate } = useGetClaimsByEmail("session?.user?.user.email" as string | undefined)
   const { query } = useRouter()
 
   return (

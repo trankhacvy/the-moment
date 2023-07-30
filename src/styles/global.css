@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply text-gray-800 antialiased dark:text-white;
+    @apply text-gray-800 antialiased dark:text-white bg-blur-image;
   }
 
   html,

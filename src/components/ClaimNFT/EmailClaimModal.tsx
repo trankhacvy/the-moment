@@ -10,24 +10,24 @@ import { AspectRatio } from "@/components/ui/AspectRatio"
 import { Button } from "@/components/ui/Button"
 import { IconButton } from "../ui/IconButton"
 import { XIcon } from "lucide-react"
-import { DropDto, NftDto } from "@/types/apis"
+import { DropDto, NftDto, UserDto } from "@/types/apis"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useToast } from "../ui/Toast"
 import { client } from "@/libs/api"
 import Link from "next/link"
-import { useUserAuth } from "@/hooks/useUserAuth"
+import { SOLANA_NETWORK } from "@/config/env"
 
 type EmailClaimModalProps = {
   trigger: React.ReactNode
   isOpen?: boolean
   onOpenChange?: (open: boolean) => void
   nftDrop: DropDto
+  user: UserDto
 }
 
-export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop }: EmailClaimModalProps) => {
+export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop, user }: EmailClaimModalProps) => {
   const nft = nftDrop.nft as NftDto
-  const { user } = useUserAuth(null)
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
@@ -35,11 +35,11 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
   const claim = async () => {
     try {
       setLoading(true)
-      // const response = await client.claimNFTByEmail({
-      //   dropId: nftDrop.id,
-      //   email: 'session.user?.user.email',
-      //   network: "devnet",
-      // })
+      await client.claimNFTByEmail({
+        dropId: nftDrop.id,
+        email: user.email,
+        network: SOLANA_NETWORK,
+      })
       setSuccess(true)
     } catch (error: any) {
       console.error(error)
@@ -64,7 +64,7 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
         <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
         <AlertDialogContent className="max-w-md">
           <div className="flex flex-col items-center gap-5">
-            <div className="w-40 overflow-hidden rounded-full">
+            <div className="w-[240px] overflow-hidden rounded-full">
               <AspectRatio>
                 <Image fill alt={nft.name} className="rounded-2xl" src={nft.image} />
               </AspectRatio>
@@ -83,10 +83,9 @@ export const EmailClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop
                   Congrats 🎉🎉
                 </Typography>
                 <Typography color="secondary">You've successfully claimed the NFT</Typography>
-                {/* // TODO update URL */}
-                {/* <Link className="text-gray-900 underline" href={`/claim/${nftDrop.suffix}/profile`}>
+                <Link className="text-gray-900 underline" href={`/claim/${nftDrop.websiteDrop.slug}/profile`}>
                   View in your profile
-                </Link> */}
+                </Link>
               </div>
             ) : (
               <Button loading={loading} scheme="default" onClick={claim} fullWidth>

@@ -1,8 +1,8 @@
 import { useNFTs } from "@/hooks/useNFTs"
 import { NFTItem, NFTItemSkeleton } from "./NFTItem"
 import { useUser } from "@/hooks/useUser"
-import { DatabaseIcon } from "lucide-react"
 import { Typography } from "../ui/Typography"
+import Image from "next/image"
 
 export const NFTList = () => {
   const { user } = useUser()
@@ -21,7 +21,7 @@ export const NFTList = () => {
   if (nfts?.data.length === 0) {
     return (
       <div className="flex flex-col items-center py-10">
-        <DatabaseIcon className="h-24 w-24 text-gray-500" />
+        <Image width={160} height={160} alt="empty" src="/assets/no-nft.png" />
         <Typography color="secondary" className="mt-5 font-semibold">
           No data
         </Typography>

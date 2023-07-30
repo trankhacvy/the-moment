@@ -18,7 +18,7 @@ import { IconButton } from "@/components/ui/IconButton"
 import { DropDto } from "@/types/apis"
 import Image from "next/image"
 import { useConnection } from "@solana/wallet-adapter-react"
-import { API_BASE_URL, APP_BASE_URL } from "@/config/env"
+import { API_BASE_URL, APP_BASE_URL, SOLANA_NETWORK } from "@/config/env"
 
 interface SolanaQRCodeProps {
   isOpen?: boolean
@@ -39,9 +39,7 @@ export const SolanaQRCode = ({ isOpen, onOpenChange, nftDrop, trigger }: SolanaQ
     setTimeout(() => {
       if (!nftDrop || !isOpen || !qrRef.current || !reference) return
 
-      const apiUrl = `${API_BASE_URL}/claims/solana-pay?dropId=${nftDrop.id}&label=${nftDrop.nft?.name}&icon=${
-        nftDrop.nft?.image
-      }}&network=devnet&reference=${reference.toBase58()}`
+      const apiUrl = `${API_BASE_URL}/claims/solana-pay?dropId=${nftDrop.id}&label=${nftDrop.nft?.name}&icon=${nftDrop.nft?.image}}&network=${SOLANA_NETWORK}`
 
       const urlParams: TransactionRequestURLFields = {
         link: new URL(apiUrl),

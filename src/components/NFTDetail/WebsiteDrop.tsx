@@ -292,7 +292,7 @@ const SolanaPayQRCode = ({ trigger }: SolanaPayQRCodeProps) => {
           </DialogDescription>
         </DialogHeader>
         <AspectRatio>
-          <Image fill src={"/assets/logo.jpg"} alt="logo" />
+          <Image fill src={"/assets/logo.png"} alt="logo" />
         </AspectRatio>
 
         <DialogFooter>

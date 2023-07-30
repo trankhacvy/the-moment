@@ -2,7 +2,6 @@ import { Typography } from "@/components/ui/Typography"
 import {
   AlertDialog,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogTrigger,
   AlertDialogCancel,
@@ -17,17 +16,17 @@ import { useEffect, useState } from "react"
 import { useToast } from "../ui/Toast"
 import { client } from "@/libs/api"
 import { useWallet } from "@solana/wallet-adapter-react"
+import { getTransactionUrl } from "@/utils/explorer"
 
 type WalletClaimModalProps = {
   trigger: React.ReactNode
   isOpen?: boolean
   onOpenChange?: (open: boolean) => void
-  nftDrop: DropDto
+  drop: DropDto
 }
 
-export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDrop }: WalletClaimModalProps) => {
-  const nft = nftDrop.nft as NftDto
-  const dropMethod = nftDrop.methods?.[0]
+export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, drop }: WalletClaimModalProps) => {
+  const nft = drop.nft as NftDto
 
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -40,10 +39,9 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
       if (!publicKey) return
       setLoading(true)
       const response = await client.claimNFTByWallet({
-        dropId: nftDrop.id,
+        dropId: drop.id,
         claimant: publicKey.toBase58(),
         network: "devnet",
-        dropMethodId: dropMethod.id,
       })
       setSignature(response.signature ?? "")
       setSuccess(true)
@@ -70,13 +68,13 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
         <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
         <AlertDialogContent className="max-w-md">
           <div className="flex flex-col items-center gap-5">
-            <div className="w-40 overflow-hidden rounded-full">
+            <div className="w-[240px] overflow-hidden rounded-full">
               <AspectRatio>
                 <Image fill alt={nft.name} className="rounded-2xl" src={nft.image} />
               </AspectRatio>
             </div>
             {!success && (
-              <Typography className="text-center">
+              <Typography className="text-center text-gray-800">
                 Click the below button to receive NFT.
                 <br /> No fees or costs are required.
               </Typography>
@@ -89,17 +87,12 @@ export const WalletClaimModal = ({ trigger, isOpen = false, onOpenChange, nftDro
                   Congrats 🎉🎉
                 </Typography>
                 <Typography color="secondary">You've successfully claimed the NFT</Typography>
-                <a
-                  className="text-gray-900 underline"
-                  target="_blank"
-                  // TODO use function
-                  href={`https://translator.shyft.to/tx/${signature}?cluster=devnet`}
-                >
+                <a className="text-gray-900 underline" target="_blank" href={getTransactionUrl(signature)}>
                   View transaction
                 </a>
               </div>
             ) : (
-              <Button loading={loading} onClick={claim} fullWidth scheme="default">
+              <Button loading={loading} onClick={claim} fullWidth>
                 Claim
               </Button>
             )}

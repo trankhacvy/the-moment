@@ -140,11 +140,14 @@ export interface NftDto {
   /** @format date-time */
   updatedAt: string
   name: string
+  /** @format uuid */
+  creator: string
   /** @minLength -1 */
   description?: string
   /** @minLength -1 */
   symbol?: string
   image: string
+  metadataUri: string
   isMutable?: boolean
   /** @minLength -1 */
   externalUrl?: string
@@ -334,7 +337,7 @@ export interface RequestDropAmountDto {
 }
 
 export interface RepayDto {
-  sessionId: string
+  callback: string
 }
 
 export type WebhookStatus = "transaction.successful" | "transaction.failed"
@@ -398,8 +401,13 @@ export interface ClaimDto {
   method: "QR_CODE" | "WALLET" | "EMAIL"
   /** @minLength -1 */
   signature?: string
-  /** @example ["QR_CODE","WALLET","EMAIL"] */
-  drop: "QR_CODE" | "WALLET" | "EMAIL"
+}
+
+export interface CreateClaimByEmailDto {
+  /** @format uuid */
+  dropId: string
+  network: string
+  email: string
 }
 
 export interface WithdrawNFTDto {
@@ -550,6 +558,8 @@ export type NftDropsControllerCreateMintLinksDropData = CheckoutDropDto
 
 export type NftDropsControllerGetDropData = DropDto
 
+export type NftDropsControllerDeleteNftData = any
+
 export type NftDropsControllerGetDropBySlugData = DropDto
 
 export type NftDropsControllerGetDropByMintLinkData = DropDto
@@ -561,8 +571,6 @@ export type NftDropsControllerRepayData = CheckoutDropDto
 export type CheckoutControllerWebhookData = any
 
 export type CheckoutControllerSimulateWebhookData = any
-
-export type CheckoutControllerRepayData = CheckoutDropDto
 
 export interface HealthCheckerControllerCheckData {
   /** @example "ok" */
@@ -598,6 +606,8 @@ export type TreesControllerCreateTreeData = TransactionResponseDto
 export type TreesControllerFindTreeData = TreeDto
 
 export type ClaimsControllerClaimByWalletData = ClaimDto
+
+export type ClaimsControllerClaimByEmailData = ClaimDto
 
 export type ClaimsControllerClaimByQrData = ClaimDto
 
